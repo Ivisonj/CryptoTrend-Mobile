@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         colorScheme: const ShadSlateColorScheme.dark(),
       ),
+
       appBuilder: (context) {
         return MaterialApp(
           theme: Theme.of(context),

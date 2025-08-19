@@ -1,3 +1,4 @@
+import 'package:crypttrend/components/header/Header.dart';
 import 'package:flutter/material.dart';
 
 class Strategies extends StatelessWidget {
@@ -5,6 +6,6 @@ class Strategies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Strategies');
+    return Scaffold(appBar: Header(), body: Text('Strategies'));
   }
 }
