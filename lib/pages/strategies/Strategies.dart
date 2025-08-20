@@ -1,10 +1,12 @@
 import 'package:crypttrend/components/header/Header.dart';
+import 'package:crypttrend/components/indicatorsForms/dmi/DmiForm.dart';
 import 'package:crypttrend/components/indicatorsForms/ema/EmaForm.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final List<Map<String, dynamic>> details = [
   {'title': 'Médias Moveis Exponenciais', 'widget': const EmaForm()},
+  {'title': 'Di+Di-', 'widget': const DmiForm()},
   // {
   //   'title': 'Di+Di-',
   //   'widget': _buildDmiForm(),
