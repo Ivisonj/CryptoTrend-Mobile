@@ -19,9 +19,9 @@ class MainCard extends StatelessWidget {
   Color _colorForStatus(TimeframeStatus status) {
     switch (status) {
       case TimeframeStatus.bullish:
-        return Colors.green;
+        return Colors.greenAccent;
       case TimeframeStatus.bearish:
-        return Colors.red;
+        return Colors.redAccent;
       case TimeframeStatus.neutral:
         return Colors.white;
     }
