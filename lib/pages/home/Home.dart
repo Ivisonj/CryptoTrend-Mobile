@@ -54,6 +54,28 @@ class Home extends StatelessWidget {
           weekly: TimeframeStatus.bearish,
         ),
       ),
+      SymbolData(
+        symbol: "SOL/USDT",
+        price: 98.25,
+        timeframes: Timeframes(
+          fifteenMinutes: TimeframeStatus.bullish,
+          oneHour: TimeframeStatus.bullish,
+          fourHours: TimeframeStatus.bullish,
+          daily: TimeframeStatus.neutral,
+          weekly: TimeframeStatus.bearish,
+        ),
+      ),
+      SymbolData(
+        symbol: "SHIB/USDT",
+        price: 98.25,
+        timeframes: Timeframes(
+          fifteenMinutes: TimeframeStatus.bullish,
+          oneHour: TimeframeStatus.bullish,
+          fourHours: TimeframeStatus.bullish,
+          daily: TimeframeStatus.neutral,
+          weekly: TimeframeStatus.bearish,
+        ),
+      ),
     ];
   }
 

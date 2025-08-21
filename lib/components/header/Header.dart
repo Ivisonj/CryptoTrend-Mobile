@@ -1,3 +1,4 @@
+import 'package:crypttrend/pages/notifications/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -18,7 +19,12 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               ShadIconButton(
-                onPressed: () => print('Notifications'),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Notifications(),
+                  ),
+                ),
                 icon: const Icon(
                   LucideIcons.bell,
                   color: Colors.white,
