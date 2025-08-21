@@ -1,14 +1,16 @@
 import 'package:crypttrend/components/header/Header.dart';
+import 'package:crypttrend/components/indicatorsForms/candlesPatterns/candlesPatterns.dart';
+import 'package:crypttrend/components/indicatorsForms/dmi/DmiForm.dart';
 import 'package:crypttrend/components/indicatorsForms/ema/EmaForm.dart';
+import 'package:crypttrend/components/indicatorsForms/stoch/Stoch.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final List<Map<String, dynamic>> details = [
   {'title': 'Médias Moveis Exponenciais', 'widget': const EmaForm()},
-  // {
-  //   'title': 'Di+Di-',
-  //   'widget': _buildDmiForm(),
-  // },
+  {'title': 'Di+Di-', 'widget': const DmiForm()},
+  {'title': 'Estocástico', 'widget': const StochForm()},
+  {'title': 'Padrões de Candles', 'widget': const CandlesPatterns()},
 ];
 
 class Strategies extends StatelessWidget {
@@ -19,7 +21,7 @@ class Strategies extends StatelessWidget {
     return Scaffold(
       appBar: Header(),
       body: Padding(
-        padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             Align(
@@ -32,17 +34,20 @@ class Strategies extends StatelessWidget {
                 ),
               ),
             ),
-
-            ShadAccordion(
-              children: details
-                  .map(
-                    (detail) => ShadAccordionItem(
-                      value: detail['title'],
-                      title: Text(detail['title']),
-                      child: detail['widget'],
-                    ),
-                  )
-                  .toList(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: ShadAccordion(
+                  children: details
+                      .map(
+                        (detail) => ShadAccordionItem(
+                          value: detail['title'],
+                          title: Text(detail['title']),
+                          child: detail['widget'],
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
             ),
           ],
         ),
