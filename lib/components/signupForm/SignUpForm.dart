@@ -1,5 +1,6 @@
 import 'package:crypttrend/pages/login/Login.dart';
 import 'package:crypttrend/pages/signup/SignUp.dart';
+import 'package:crypttrend/service/CreateUserService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -94,15 +95,19 @@ class _SignUpFormState extends State<SignUpForm> {
 
             const SizedBox(height: 24),
 
+            // No seu ShadButton dentro do SignUpForm
             ShadButton(
               child: const Text('Criar Conta'),
               width: double.infinity,
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState?.validate() ?? false) {
-                  // faça o submit
-                  print(_nameController.text);
-                  print(_emailController.text);
-                  print(_passwordController.text);
+                  // Usar a função com loading integrado
+                  await createUserService(
+                    context,
+                    _nameController.text.trim(),
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                  );
                 }
               },
             ),
