@@ -32,9 +32,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 backgroundColor: Colors.transparent,
               ),
-              const SizedBox(
-                width: 8.0,
-              ), // Espaçamento entre o botão e o avatar
+              const SizedBox(width: 8.0),
               ShadAvatar(
                 'https://app.requestly.io/delay/2000/avatars.githubusercontent.com/u/124599?v=4',
                 size: const Size(50, 50),
