@@ -58,7 +58,6 @@ class _MainNavState extends State<MainNav> {
 
   @override
   Widget build(BuildContext context) {
-    // Pegamos a cor primária do tema — com Shadcn ela seguirá o design do tema.
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
@@ -66,7 +65,6 @@ class _MainNavState extends State<MainNav> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        // Faz o ícone (e label) selecionado usar a cor primária do tema
         selectedItemColor: primaryColor,
         unselectedItemColor: Colors.grey,
         selectedIconTheme: IconThemeData(color: primaryColor, size: 28),

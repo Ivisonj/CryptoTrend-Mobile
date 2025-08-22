@@ -1,10 +1,10 @@
-import 'package:crypttrend/components/loginForm/LoginForm.dart';
+import 'package:crypttrend/components/SignUpForm/SignUpForm.dart';
 import 'package:flutter/material.dart';
 
-import '../../components/loginForm/LoginForm.dart';
+import '../../components/SignUpForm/SignUpForm.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class SignUp extends StatelessWidget {
+  const SignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +18,13 @@ class Login extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Login',
+                    'Criar Conta',
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                   ),
 
                   SizedBox(height: 20),
 
-                  LoginForm(),
+                  SignUpForm(),
                 ],
               ),
             ),

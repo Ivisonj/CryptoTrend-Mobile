@@ -55,17 +55,6 @@ class Home extends StatelessWidget {
         ),
       ),
       SymbolData(
-        symbol: "SOL/USDT",
-        price: 98.25,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.bullish,
-          oneHour: TimeframeStatus.bullish,
-          fourHours: TimeframeStatus.bullish,
-          daily: TimeframeStatus.neutral,
-          weekly: TimeframeStatus.bearish,
-        ),
-      ),
-      SymbolData(
         symbol: "SHIB/USDT",
         price: 98.25,
         timeframes: Timeframes(
@@ -106,17 +95,20 @@ class Home extends StatelessWidget {
                 margin: EdgeInsets.only(top: 15, bottom: 15),
                 child: Row(
                   children: [
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 345),
+                    Expanded(
+                      flex: 90,
                       child: const ShadInput(
                         placeholder: Text('Buscar Criptomoeda...'),
                         keyboardType: TextInputType.name,
                       ),
                     ),
                     SizedBox(width: 10),
-                    ShadIconButton(
-                      onPressed: () => print('Primary'),
-                      icon: const Icon(LucideIcons.search),
+                    Expanded(
+                      flex: 10,
+                      child: ShadIconButton(
+                        onPressed: () => print('Primary'),
+                        icon: const Icon(LucideIcons.search),
+                      ),
                     ),
                   ],
                 ),
