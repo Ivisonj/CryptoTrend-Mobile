@@ -106,6 +106,19 @@ class _SignUpFormState extends State<SignUpForm> {
                 }
               },
             ),
+
+            const SizedBox(height: 24),
+
+            Align(
+              alignment: Alignment.center,
+              child: ShadButton.ghost(
+                child: const Text('Fazer Login'),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                ),
+              ),
+            ),
           ],
         ),
       ),

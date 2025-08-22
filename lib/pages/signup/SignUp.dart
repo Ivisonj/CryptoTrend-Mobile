@@ -26,17 +26,6 @@ class SignUp extends StatelessWidget {
                   SizedBox(height: 20),
 
                   SignUpForm(),
-
-                  Align(
-                    alignment: Alignment.center,
-                    child: ShadButton.ghost(
-                      child: const Text('Fazer Login'),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUp()),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
