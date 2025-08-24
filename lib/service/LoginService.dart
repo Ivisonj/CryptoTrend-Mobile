@@ -1,20 +1,19 @@
 import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
+import 'package:crypttrend/pages/checkPage/CheckPage.dart';
 import 'package:crypttrend/pages/home/home.dart';
 import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-createUserService(context, name, email, password) async {
+loginService(context, email, password) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/user');
+    var url = Uri.parse('${Env.baseApiUrl}/user/signin');
 
-    Map<String, dynamic> body = {
-      'name': name,
-      'email': email,
-      'password': password,
-    };
+    Map<String, dynamic> body = {'email': email, 'password': password};
 
     var response = await http.post(
       url,
@@ -25,24 +24,27 @@ createUserService(context, name, email, password) async {
       body: jsonEncode(body),
     );
 
-    if (response.statusCode == 201) {
-      var responseData = jsonDecode(response.body);
-      String successMessage = 'Usuário criado com sucesso!';
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
 
-      if (responseData is Map && responseData.containsKey('message')) {
-        successMessage = responseData['message'];
+      final String access_token = data['access_token'];
+      final String name = data['name'];
+      final String email = data['email'];
+      final bool premium = (data['premium'] is bool)
+          ? data['premium'] as bool
+          : (data['premium']?.toString() == 'true');
+
+      if (access_token != null) {
+        await sharedPreferences.setString('access_token', access_token);
+        await sharedPreferences.setString('name', name);
+        await sharedPreferences.setString('email', email);
+        await sharedPreferences.setBool('premium', premium);
       }
 
-      var snackBar = SnackBar(
-        content: Text(successMessage),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => CheckPage()),
       );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     } else {
       var errors = jsonDecode(response.body);
 

@@ -1,5 +1,6 @@
 import 'package:crypttrend/pages/Login/Login.dart';
 import 'package:crypttrend/pages/signup/SignUp.dart';
+import 'package:crypttrend/service/LoginService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -80,10 +81,13 @@ class _LoginFormState extends State<LoginForm> {
             ShadButton(
               child: const Text('Entrar'),
               width: double.infinity,
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState?.validate() ?? false) {
-                  print(_emailController.text);
-                  print(_passwordController.text);
+                  await loginService(
+                    context,
+                    _emailController.text.trim(),
+                    _passwordController.text.trim(),
+                  );
                 }
               },
             ),

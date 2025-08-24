@@ -1,3 +1,4 @@
+import 'package:crypttrend/pages/checkPage/CheckPage.dart';
 import 'package:crypttrend/pages/home/Home.dart';
 import 'package:crypttrend/pages/profile/Profile.dart';
 import 'package:crypttrend/pages/strategies/Strategies.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
           darkTheme: Theme.of(context).copyWith(brightness: Brightness.dark),
           themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
-          home: const MainNav(),
+          home: const CheckPage(),
           builder: (context, child) {
             return ShadAppBuilder(child: child!);
           },
