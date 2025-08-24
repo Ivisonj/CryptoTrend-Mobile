@@ -1,3 +1,4 @@
+import 'package:crypttrend/service/CreateEmaStrategyService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -11,11 +12,19 @@ class EmaForm extends StatefulWidget {
 class _EmaFormState extends State<EmaForm> {
   bool selected = false;
   bool candleClose = true;
-  final TextEditingController ema1Controller = TextEditingController();
-  final TextEditingController ema2Controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController ema1Controller = TextEditingController();
+  late TextEditingController ema2Controller = TextEditingController();
   String baseCalcEma = 'close';
 
   final List<String> selectOptions = ['open', 'close', 'high', 'low'];
+
+  @override
+  void initState() {
+    super.initState();
+    ema1Controller = TextEditingController();
+    ema2Controller = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -26,86 +35,119 @@ class _EmaFormState extends State<EmaForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ShadSwitch(
-            value: selected,
-            onChanged: (v) => setState(() => selected = v),
-            label: const Text('Selecionar Estratégia'),
-          ),
-
-          const SizedBox(height: 24),
-
-          ShadSwitch(
-            value: candleClose,
-            onChanged: (v) => setState(() => candleClose = v),
-            label: const Text('Operar Fechamento do Candle?'),
-          ),
-
-          const SizedBox(height: 24),
-
-          // EMA1 Input
-          TextFormField(
-            controller: ema1Controller,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Média Curta',
-              border: OutlineInputBorder(),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ShadSwitch(
+              value: selected,
+              onChanged: (v) => setState(() => selected = v),
+              label: const Text('Selecionar Estratégia'),
             ),
-          ),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
-          // EMA2 Input
-          TextFormField(
-            controller: ema2Controller,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Média Longa',
-              border: OutlineInputBorder(),
+            ShadSwitch(
+              value: candleClose,
+              onChanged: (v) => setState(() => candleClose = v),
+              label: const Text('Operar Fechamento do Candle?'),
             ),
-          ),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
-          // Select/Dropdown
-          DropdownButtonFormField<String>(
-            value: baseCalcEma,
-            decoration: const InputDecoration(
-              labelText: 'Base do Calculo',
-              border: OutlineInputBorder(),
+            ShadInputFormField(
+              id: 'ema1',
+              label: const Text('Média Curta'),
+              placeholder: const Text('Ex: 9'),
+              controller: ema1Controller,
+              keyboardType: TextInputType.number,
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) {
+                  return 'Média Curta é obrigatória';
+                }
+                final intValue = int.tryParse(v.trim());
+                if (intValue == null) {
+                  return 'Deve ser um número válido';
+                }
+                if (intValue <= 0) {
+                  return 'Deve ser um número positivo';
+                }
+                return null;
+              },
             ),
-            items: selectOptions.map((String option) {
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Text(option.toUpperCase()),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() {
-                  baseCalcEma = newValue;
-                });
-              }
-            },
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
-          ShadButton(
-            child: const Text('Salvar'),
-            onPressed: () {
-              print('Selected: $selected');
-              print('CandleClose: $candleClose');
-              print('EMA1: ${ema1Controller.text}');
-              print('EMA2: ${ema2Controller.text}');
-              print('Selected: $baseCalcEma');
-            },
-          ),
-        ],
+            ShadInputFormField(
+              id: 'ema2',
+              label: const Text('Média Longa'),
+              placeholder: const Text('Ex: 21'),
+              controller: ema2Controller,
+              keyboardType: TextInputType.number,
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) {
+                  return 'Média Curta é obrigatória';
+                }
+                final intValue = int.tryParse(v.trim());
+                if (intValue == null) {
+                  return 'Deve ser um número válido';
+                }
+                if (intValue <= 0) {
+                  return 'Deve ser um número positivo';
+                }
+                return null;
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            DropdownButtonFormField<String>(
+              value: baseCalcEma,
+              decoration: const InputDecoration(
+                labelText: 'Base do Cálculo',
+                border: OutlineInputBorder(),
+              ),
+              items: selectOptions.map((String option) {
+                return DropdownMenuItem<String>(
+                  value: option,
+                  child: Text(option.toUpperCase()),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    baseCalcEma = newValue;
+                  });
+                }
+              },
+            ),
+
+            const SizedBox(height: 24),
+
+            ShadButton(
+              child: const Text('Salvar'),
+              width: double.infinity,
+              onPressed: () {
+                if (_formKey.currentState?.validate() ?? false) {
+                  final ema1 = int.parse(ema1Controller.text.trim());
+                  final ema2 = int.parse(ema2Controller.text.trim());
+
+                  createEmaStrategyService(
+                    context,
+                    selected,
+                    candleClose,
+                    ema1,
+                    ema2,
+                    baseCalcEma,
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
