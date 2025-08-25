@@ -1,5 +1,6 @@
 import 'package:crypttrend/service/CreateEmaStrategyService.dart';
 import 'package:crypttrend/service/GetEmaStrategyService.dart';
+import 'package:crypttrend/service/UpdateEmaStrategyService%20.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -14,11 +15,12 @@ class _EmaFormState extends State<EmaForm> {
   bool selected = false;
   bool candleClose = true;
   bool isLoading = true;
+  bool _hasExistingData = false;
+
   final _formKey = GlobalKey<FormState>();
   late TextEditingController ema1Controller = TextEditingController();
   late TextEditingController ema2Controller = TextEditingController();
   String baseCalcEma = 'close';
-
   final List<String> selectOptions = ['open', 'close', 'high', 'low'];
 
   @override
@@ -35,6 +37,7 @@ class _EmaFormState extends State<EmaForm> {
 
       if (data != null && mounted) {
         setState(() {
+          _hasExistingData = true;
           selected = data['selected'] ?? false;
           candleClose = data['candleClose'] ?? true;
           baseCalcEma = data['baseCalcEma'] ?? 'close';
@@ -45,20 +48,55 @@ class _EmaFormState extends State<EmaForm> {
           if (data['ema2'] != null) {
             ema2Controller.text = data['ema2'].toString();
           }
-
           isLoading = false;
         });
       } else if (mounted) {
         setState(() {
+          _hasExistingData = false;
           isLoading = false;
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
+          _hasExistingData = false;
           isLoading = false;
         });
         print('Erro ao carregar dados da EMA: $e');
+      }
+    }
+  }
+
+  Future<void> _saveEmaData() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final ema1 = int.parse(ema1Controller.text.trim());
+      final ema2 = int.parse(ema2Controller.text.trim());
+
+      try {
+        if (_hasExistingData) {
+          await updateEmaStrategyService(
+            context,
+            selected,
+            candleClose,
+            ema1,
+            ema2,
+            baseCalcEma,
+          );
+        } else {
+          await createEmaStrategyService(
+            context,
+            selected,
+            candleClose,
+            ema1,
+            ema2,
+            baseCalcEma,
+          );
+          setState(() {
+            _hasExistingData = true;
+          });
+        }
+      } catch (e) {
+        print('Erro ao salvar dados da EMA: $e');
       }
     }
   }
@@ -88,17 +126,13 @@ class _EmaFormState extends State<EmaForm> {
               onChanged: (v) => setState(() => selected = v),
               label: const Text('Selecionar Estratégia'),
             ),
-
             const SizedBox(height: 24),
-
             ShadSwitch(
               value: candleClose,
               onChanged: (v) => setState(() => candleClose = v),
               label: const Text('Operar Fechamento do Candle?'),
             ),
-
             const SizedBox(height: 24),
-
             ShadInputFormField(
               id: 'ema1',
               label: const Text('Média Curta'),
@@ -119,9 +153,7 @@ class _EmaFormState extends State<EmaForm> {
                 return null;
               },
             ),
-
             const SizedBox(height: 16),
-
             ShadInputFormField(
               id: 'ema2',
               label: const Text('Média Longa'),
@@ -139,7 +171,6 @@ class _EmaFormState extends State<EmaForm> {
                 if (intValue <= 0) {
                   return 'Deve ser um número positivo';
                 }
-                // Validação adicional: EMA longa deve ser maior que EMA curta
                 final ema1Value = int.tryParse(ema1Controller.text.trim());
                 if (ema1Value != null && intValue <= ema1Value) {
                   return 'Média Longa deve ser maior que Média Curta';
@@ -147,9 +178,7 @@ class _EmaFormState extends State<EmaForm> {
                 return null;
               },
             ),
-
             const SizedBox(height: 16),
-
             DropdownButtonFormField<String>(
               value: baseCalcEma,
               decoration: const InputDecoration(
@@ -170,26 +199,10 @@ class _EmaFormState extends State<EmaForm> {
                 }
               },
             ),
-
             const SizedBox(height: 24),
-
             ShadButton(
-              child: const Text('Salvar'),
-              onPressed: () {
-                if (_formKey.currentState?.validate() ?? false) {
-                  final ema1 = int.parse(ema1Controller.text.trim());
-                  final ema2 = int.parse(ema2Controller.text.trim());
-
-                  createEmaStrategyService(
-                    context,
-                    selected,
-                    candleClose,
-                    ema1,
-                    ema2,
-                    baseCalcEma,
-                  );
-                }
-              },
+              child: Text(_hasExistingData ? 'Atualizar' : 'Criar'),
+              onPressed: _saveEmaData,
             ),
           ],
         ),
