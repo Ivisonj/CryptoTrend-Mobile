@@ -1,35 +1,29 @@
 import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
-import 'package:crypttrend/pages/home/home.dart';
-import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-updateEmaStrategyService(
+createDmiStrategyService(
   BuildContext context,
-  bool? selected,
-  bool? candleClose,
-  int? ema1,
-  int? ema2,
-  String? baseCalcEma,
+  bool selected,
+  bool candleClose,
+  int length,
 ) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/ema');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/dmi');
 
     Map<String, dynamic> body = {
       'selected': selected,
       'candleClose': candleClose,
-      'ema1': ema1,
-      'ema2': ema2,
-      'baseCalcEma': baseCalcEma,
+      'length': length,
     };
 
-    var response = await http.patch(
+    var response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -39,7 +33,7 @@ updateEmaStrategyService(
       body: jsonEncode(body),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       var responseData = jsonDecode(response.body);
       String successMessage = 'Sucesso!';
 

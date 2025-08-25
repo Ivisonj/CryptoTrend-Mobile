@@ -13,7 +13,7 @@ class EmaForm extends StatefulWidget {
 
 class _EmaFormState extends State<EmaForm> {
   bool selected = false;
-  bool candleClose = true;
+  bool candleClose = false;
   bool isLoading = true;
   bool _hasExistingData = false;
 
@@ -201,7 +201,7 @@ class _EmaFormState extends State<EmaForm> {
             ),
             const SizedBox(height: 24),
             ShadButton(
-              child: Text(_hasExistingData ? 'Atualizar' : 'Criar'),
+              child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
               onPressed: _saveEmaData,
             ),
           ],

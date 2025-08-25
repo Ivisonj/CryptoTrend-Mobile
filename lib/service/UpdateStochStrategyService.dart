@@ -1,32 +1,34 @@
 import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
-import 'package:crypttrend/pages/home/home.dart';
-import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-updateEmaStrategyService(
+updateStochStrategyService(
   BuildContext context,
   bool? selected,
-  bool? candleClose,
-  int? ema1,
-  int? ema2,
-  String? baseCalcEma,
+  bool? crossover,
+  int? length,
+  int? kSmoothing,
+  int? dSmoothing,
+  int? overbought,
+  int? oversold,
 ) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/ema');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch');
 
     Map<String, dynamic> body = {
       'selected': selected,
-      'candleClose': candleClose,
-      'ema1': ema1,
-      'ema2': ema2,
-      'baseCalcEma': baseCalcEma,
+      'crossover': crossover,
+      'length': length,
+      'kSmoothing': kSmoothing,
+      'dSmoothing': dSmoothing,
+      'overbought': overbought,
+      'oversold': oversold,
     };
 
     var response = await http.patch(
