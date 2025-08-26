@@ -1,13 +1,12 @@
 import 'package:crypttrend/pages/home/home.dart';
+import 'package:crypttrend/service/DeleteSymbolService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-import '../../core/symbol/SymbolsData.dart';
 
 class MainCard extends StatelessWidget {
   final String symbol;
   final double price;
-  final Timeframes timeframes;
+  final Map<String, dynamic> timeframes;
 
   const MainCard({
     super.key,
@@ -16,14 +15,16 @@ class MainCard extends StatelessWidget {
     required this.timeframes,
   });
 
-  Color _colorForStatus(TimeframeStatus status) {
+  Color _colorForStatus(String? status) {
     switch (status) {
-      case TimeframeStatus.bullish:
+      case 'Bullish':
         return Colors.greenAccent;
-      case TimeframeStatus.bearish:
+      case 'Bearish':
         return Colors.redAccent;
-      case TimeframeStatus.neutral:
+      case 'Neutral':
         return Colors.white;
+      default:
+        return Colors.grey;
     }
   }
 
@@ -51,7 +52,7 @@ class MainCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  price.toStringAsFixed(2),
+                  '\$${price.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -63,40 +64,62 @@ class MainCard extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 15),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('15m'),
-                      backgroundColor: _colorForStatus(
-                        timeframes.fifteenMinutes,
+                  // Grupo de timeframes à esquerda
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('15m'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['fifteenMinutes'],
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('1h'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['oneHour'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('4h'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['forHours'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('1d'),
+                          backgroundColor: _colorForStatus(timeframes['daily']),
+                        ),
+                      ),
+                      ShadIconButton(
+                        icon: const Text('1S'),
+                        backgroundColor: _colorForStatus(timeframes['weekly']),
+                      ),
+                    ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('1h'),
-                      backgroundColor: _colorForStatus(timeframes.oneHour),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('4h'),
-                      backgroundColor: _colorForStatus(timeframes.fourHours),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('1d'),
-                      backgroundColor: _colorForStatus(timeframes.daily),
-                    ),
-                  ),
+
                   ShadIconButton(
-                    icon: const Text('1s'),
-                    backgroundColor: _colorForStatus(timeframes.weekly),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      size: 25,
+                      color: Colors.redAccent,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    onPressed: () {
+                      deleteSymbolService(context, symbol);
+                    },
                   ),
                 ],
               ),

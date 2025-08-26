@@ -1,8 +1,10 @@
+import 'package:crypttrend/pages/checkPage/CheckPage.dart';
 import 'package:crypttrend/pages/home/Home.dart';
 import 'package:crypttrend/pages/profile/Profile.dart';
 import 'package:crypttrend/pages/strategies/Strategies.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter_requery/flutter_requery.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
           darkTheme: Theme.of(context).copyWith(brightness: Brightness.dark),
           themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
-          home: const MainNav(),
+          home: const CheckPage(),
           builder: (context, child) {
             return ShadAppBuilder(child: child!);
           },
@@ -58,7 +60,6 @@ class _MainNavState extends State<MainNav> {
 
   @override
   Widget build(BuildContext context) {
-    // Pegamos a cor primária do tema — com Shadcn ela seguirá o design do tema.
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
@@ -66,7 +67,6 @@ class _MainNavState extends State<MainNav> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        // Faz o ícone (e label) selecionado usar a cor primária do tema
         selectedItemColor: primaryColor,
         unselectedItemColor: Colors.grey,
         selectedIconTheme: IconThemeData(color: primaryColor, size: 28),
