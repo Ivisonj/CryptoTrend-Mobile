@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../service/CreateCandlesPatternsStrategyService.dart';
 import '../../../service/GetCandlesPatternsStrategyService.dart';
@@ -17,6 +18,7 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
   bool candleClose = false;
   bool isLoading = true;
   bool _hasExistingData = false;
+  bool _isPremiumUser = false;
   String pattern = 'engulfing';
 
   final _formKey = GlobalKey<FormState>();
@@ -25,7 +27,35 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
   @override
   void initState() {
     super.initState();
-    _loadCandlesPatternsData();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    await Future.wait([_loadPremiumStatus(), _loadCandlesPatternsData()]);
+  }
+
+  Future<void> _loadPremiumStatus() async {
+    try {
+      final isPremium = await _isPremium();
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = isPremium;
+        });
+      }
+    } catch (e) {
+      print('Erro ao verificar status premium: $e');
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = false;
+        });
+      }
+    }
+  }
+
+  Future<bool> _isPremium() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final premium = sharedPreferences.getBool('premium');
+    return premium ?? false;
   }
 
   Future<void> _loadCandlesPatternsData() async {
@@ -141,10 +171,34 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
               },
             ),
             const SizedBox(height: 24),
-            ShadButton(
-              child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
-              onPressed: _saveCandlesPatternsData,
-            ),
+
+            if (_isPremiumUser)
+              ShadButton(
+                child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
+                onPressed: _saveCandlesPatternsData,
+              ),
+
+            if (!_isPremiumUser)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.lock_outline, color: Colors.orange),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Esta funcionalidade é exclusiva para usuários Premium',
+                        style: TextStyle(color: Colors.orange),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../service/CreateStochStrategyService.dart';
 import '../../../service/GetStochStrategyService.dart';
@@ -17,6 +18,7 @@ class _StochFormState extends State<StochForm> {
   bool crossover = false;
   bool isLoading = true;
   bool _hasExistingData = false;
+  bool _isPremiumUser = false;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController lengthController = TextEditingController();
@@ -33,7 +35,36 @@ class _StochFormState extends State<StochForm> {
     dSmoothingController = TextEditingController();
     overboughtController = TextEditingController();
     oversoldController = TextEditingController();
-    _loadStochData();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    // Carrega dados premium e Stoch em paralelo
+    await Future.wait([_loadPremiumStatus(), _loadStochData()]);
+  }
+
+  Future<void> _loadPremiumStatus() async {
+    try {
+      final isPremium = await _isPremium();
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = isPremium;
+        });
+      }
+    } catch (e) {
+      print('Erro ao verificar status premium: $e');
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = false;
+        });
+      }
+    }
+  }
+
+  Future<bool> _isPremium() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final premium = sharedPreferences.getBool('premium');
+    return premium ?? false;
   }
 
   Future<void> _loadStochData() async {
@@ -273,10 +304,35 @@ class _StochFormState extends State<StochForm> {
               },
             ),
             const SizedBox(height: 24),
-            ShadButton(
-              child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
-              onPressed: _saveStochData,
-            ),
+
+            // Correção principal: usar a variável de estado ao invés da função
+            if (_isPremiumUser)
+              ShadButton(
+                child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
+                onPressed: _saveStochData,
+              ),
+
+            if (!_isPremiumUser)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.lock_outline, color: Colors.orange),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Esta funcionalidade é exclusiva para usuários Premium',
+                        style: TextStyle(color: Colors.orange),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
