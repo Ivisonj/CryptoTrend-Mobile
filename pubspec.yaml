@@ -37,6 +37,7 @@ dependencies:
   shadcn_ui: ^0.28.5
   http: ^1.1.0
   shared_preferences: ^2.5.3
+  flutter_query: ^0.3.7
 
 dev_dependencies:
   flutter_test:

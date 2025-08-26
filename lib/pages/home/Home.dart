@@ -1,77 +1,74 @@
 import 'package:crypttrend/components/card/MainCard.dart';
 import 'package:crypttrend/components/header/Header.dart';
+import 'package:crypttrend/service/AddSymbolService.dart';
+import 'package:crypttrend/service/GetSymbolsService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../core/symbol/SymbolsData.dart';
-
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
-  List<SymbolData> getMockData() {
-    return [
-      SymbolData(
-        symbol: "BTC/USDT",
-        price: 43250.50,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.bullish,
-          oneHour: TimeframeStatus.bearish,
-          fourHours: TimeframeStatus.neutral,
-          daily: TimeframeStatus.bullish,
-          weekly: TimeframeStatus.bullish,
-        ),
-      ),
-      SymbolData(
-        symbol: "ETH/USDT",
-        price: 2580.75,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.neutral,
-          oneHour: TimeframeStatus.bullish,
-          fourHours: TimeframeStatus.bullish,
-          daily: TimeframeStatus.bearish,
-          weekly: TimeframeStatus.neutral,
-        ),
-      ),
-      SymbolData(
-        symbol: "ADA/USDT",
-        price: 0.485,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.bearish,
-          oneHour: TimeframeStatus.bearish,
-          fourHours: TimeframeStatus.neutral,
-          daily: TimeframeStatus.bullish,
-          weekly: TimeframeStatus.bullish,
-        ),
-      ),
-      SymbolData(
-        symbol: "SOL/USDT",
-        price: 98.25,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.bullish,
-          oneHour: TimeframeStatus.bullish,
-          fourHours: TimeframeStatus.bullish,
-          daily: TimeframeStatus.neutral,
-          weekly: TimeframeStatus.bearish,
-        ),
-      ),
-      SymbolData(
-        symbol: "SHIB/USDT",
-        price: 98.25,
-        timeframes: Timeframes(
-          fifteenMinutes: TimeframeStatus.bullish,
-          oneHour: TimeframeStatus.bullish,
-          fourHours: TimeframeStatus.bullish,
-          daily: TimeframeStatus.neutral,
-          weekly: TimeframeStatus.bearish,
-        ),
-      ),
-    ];
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<Map<String, dynamic>> symbolData = [];
+  bool isLoading = true;
+  String? errorMessage;
+  late TextEditingController _symbolInputController;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSymbolData();
+    _symbolInputController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _symbolInputController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadSymbolData() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final apiData = await getSymbolsService(context);
+
+      print(apiData);
+
+      if (apiData != null && apiData is List) {
+        setState(() {
+          symbolData = apiData
+              .map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Nenhum dado retornado da API';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Erro ao carregar dados: ${e.toString()}';
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _refreshData() async {
+    await _loadSymbolData();
   }
 
   @override
   Widget build(BuildContext context) {
-    final mockData = getMockData();
-
     return Scaffold(
       appBar: const Header(),
       body: Padding(
@@ -97,39 +94,103 @@ class Home extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 90,
-                      child: const ShadInput(
-                        placeholder: Text('Buscar Criptomoeda...'),
-                        keyboardType: TextInputType.name,
+                      child: ShadInputFormField(
+                        id: 'symbolInput',
+                        placeholder: const Text('Adiconar crypto moeda...'),
+                        controller: _symbolInputController,
+                        keyboardType: TextInputType.text,
                       ),
                     ),
+
                     SizedBox(width: 10),
+
                     Expanded(
                       flex: 10,
                       child: ShadIconButton(
-                        onPressed: () => print('Primary'),
-                        icon: const Icon(LucideIcons.search),
+                        onPressed: () => {
+                          addSymbolService(
+                            context,
+                            _symbolInputController.text,
+                          ),
+                        },
+                        icon: const Icon(LucideIcons.plus),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+            Expanded(child: _buildContent()),
+          ],
+        ),
+      ),
+    );
+  }
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: mockData.length,
-                itemBuilder: (context, index) {
-                  final symbolData = mockData[index];
-                  return MainCard(
-                    symbol: symbolData.symbol,
-                    price: symbolData.price,
-                    timeframes: symbolData.timeframes,
-                  );
-                },
-              ),
+  Widget _buildContent() {
+    if (isLoading) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Carregando dados...'),
+          ],
+        ),
+      );
+    }
+
+    if (errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              errorMessage!,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _refreshData,
+              child: Text('Tentar Novamente'),
             ),
           ],
         ),
+      );
+    }
+
+    if (symbolData.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.search_off, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Nenhuma moeda encontrada',
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: ListView.builder(
+        itemCount: symbolData.length,
+        itemBuilder: (context, index) {
+          final symbol = symbolData[index];
+          return MainCard(
+            symbol: symbol['symbol'] ?? '',
+            price: (symbol['price'] ?? 0).toDouble(),
+            timeframes: symbol['timeframes'] ?? {},
+          );
+        },
       ),
     );
   }
