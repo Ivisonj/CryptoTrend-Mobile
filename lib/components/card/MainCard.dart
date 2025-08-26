@@ -1,4 +1,5 @@
 import 'package:crypttrend/pages/home/home.dart';
+import 'package:crypttrend/service/DeleteSymbolService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -63,40 +64,62 @@ class MainCard extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 15),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('15m'),
-                      backgroundColor: _colorForStatus(
-                        timeframes['fifteenMinutes'],
+                  // Grupo de timeframes à esquerda
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('15m'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['fifteenMinutes'],
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('1h'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['oneHour'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('4h'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['forHours'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('1d'),
+                          backgroundColor: _colorForStatus(timeframes['daily']),
+                        ),
+                      ),
+                      ShadIconButton(
+                        icon: const Text('1S'),
+                        backgroundColor: _colorForStatus(timeframes['weekly']),
+                      ),
+                    ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('1h'),
-                      backgroundColor: _colorForStatus(timeframes['oneHour']),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('4h'),
-                      backgroundColor: _colorForStatus(timeframes['forHours']),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: ShadIconButton(
-                      icon: const Text('1d'),
-                      backgroundColor: _colorForStatus(timeframes['daily']),
-                    ),
-                  ),
+
                   ShadIconButton(
-                    icon: const Text('1S'),
-                    backgroundColor: _colorForStatus(timeframes['weekly']),
+                    icon: const Icon(
+                      Icons.delete_outline,
+                      size: 25,
+                      color: Colors.redAccent,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    onPressed: () {
+                      deleteSymbolService(context, symbol);
+                    },
                   ),
                 ],
               ),

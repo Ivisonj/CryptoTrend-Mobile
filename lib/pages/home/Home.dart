@@ -40,8 +40,6 @@ class _HomeState extends State<Home> {
     try {
       final apiData = await getSymbolsService(context);
 
-      print(apiData);
-
       if (apiData != null && apiData is List) {
         setState(() {
           symbolData = apiData
