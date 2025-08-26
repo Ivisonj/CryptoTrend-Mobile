@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-getSymbolsService(context) async {
+Future<List<Map<String, dynamic>>> getSymbolsService() async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final access_token = sharedPreferences.getString('access_token');
 
@@ -24,28 +24,28 @@ getSymbolsService(context) async {
     final bodyStr = response.body;
 
     if (bodyStr.isEmpty) {
-      return null;
+      throw Exception('Resposta vazia da API');
     }
 
     final body = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
+      List symbolsList;
       if (body is List) {
-        return body[0]['symbols'] as List;
+        symbolsList = body[0]['symbols'] as List;
       } else if (body is Map<String, dynamic>) {
-        return body['symbols'] as List;
+        symbolsList = body['symbols'] as List;
       } else {
-        return [];
+        symbolsList = [];
       }
+
+      return symbolsList
+          .map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
+          .toList();
+    } else {
+      throw Exception('Erro HTTP: ${response.statusCode}');
     }
   } catch (e) {
-    print('Erro de conexão: ${e.toString()}');
-    var snackBar = SnackBar(
-      content: Text('Erro de conexão: ${e.toString()}'),
-      backgroundColor: Colors.redAccent,
-      duration: Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    throw Exception('Erro de conexão: ${e.toString()}');
   }
 }

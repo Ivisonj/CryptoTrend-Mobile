@@ -73,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.7"
   extended_image:
     dependency: transitive
     description:
@@ -134,14 +126,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.2"
-  flutter_hooks:
-    dependency: transitive
-    description:
-      name: flutter_hooks
-      sha256: b10cab7e0e4dbb60ff5360a740def3919aecbc672240f742a7130a2874204229
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.19.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -155,14 +139,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_query:
+  flutter_requery:
     dependency: "direct main"
     description:
-      name: flutter_query
-      sha256: "648c95769fa67ddca237687487248738cf38c2a70e916d232054248115f35142"
+      name: flutter_requery
+      sha256: "0212859ca3c1fa74b7777769afc9fba7459ac0b0c0cf92c850989defac07f7f9"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.7"
+    version: "0.1.16"
   flutter_shaders:
     dependency: transitive
     description:
@@ -293,14 +277,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -389,22 +365,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      sha256: "4e82183fa20e5ca25703ead7e05de9e4cceed1fbd1eadc1ac3cb6f565a09f272"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.5+1"
-  query_core:
-    dependency: transitive
-    description:
-      name: query_core
-      sha256: "23ec55ab8123435e107df94276cca3ed972f9a4834b5a0b5085dda2402c41183"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
   shadcn_ui:
     dependency: "direct main"
     description:
