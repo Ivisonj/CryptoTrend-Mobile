@@ -5,6 +5,8 @@ import 'package:crypttrend/service/GetSymbolsService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,17 +18,53 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late TextEditingController _symbolInputController;
   static const String symbolsCacheKey = 'symbols_data';
+  Timer? _apiTimer;
 
   @override
   void initState() {
     super.initState();
     _symbolInputController = TextEditingController();
+    _setupPeriodicApiCall();
   }
 
   @override
   void dispose() {
     _symbolInputController.dispose();
+    _apiTimer?.cancel();
     super.dispose();
+  }
+
+  void _setupPeriodicApiCall() {
+    _apiTimer?.cancel();
+
+    final now = DateTime.now();
+    final nextCallTime = _getNextCallTime(now);
+    final initialDelay = nextCallTime.difference(now);
+
+    Timer(initialDelay, () {
+      _refreshData();
+
+      _apiTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+        print('Chamando API às: ${DateTime.now().toString()}');
+        _refreshData();
+      });
+    });
+  }
+
+  DateTime _getNextCallTime(DateTime now) {
+    if (now.second < 20) {
+      return DateTime(now.year, now.month, now.day, now.hour, now.minute, 20);
+    } else {
+      final nextMinute = now.add(const Duration(minutes: 1));
+      return DateTime(
+        nextMinute.year,
+        nextMinute.month,
+        nextMinute.day,
+        nextMinute.hour,
+        nextMinute.minute,
+        20,
+      );
+    }
   }
 
   void _refreshData() {

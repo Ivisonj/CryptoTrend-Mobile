@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final List<Map<String, dynamic>> details = [
-  {'title': 'MÉDIAS MÓVEIS EXPONÊNCIAIS', 'widget': const EmaForm()},
-  {'title': 'DI+DI-', 'widget': const DmiForm()},
-  {'title': 'ESTOCÁSTICO-RSI', 'widget': const StochRsiForm()},
-  {'title': 'PADÕES DE CANDLES', 'widget': const CandlesPatterns()},
+  {'title': 'Médias Móveis Exponênciais', 'widget': const EmaForm()},
+  {'title': 'Di+Di-', 'widget': const DmiForm()},
+  {'title': 'Estocástico-Rsi', 'widget': const StochRsiForm()},
+  {'title': 'Padões de Candles', 'widget': const CandlesPatterns()},
 ];
 
 class Strategies extends StatelessWidget {
