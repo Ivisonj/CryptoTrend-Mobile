@@ -137,12 +137,12 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
               onChanged: (v) => setState(() => selected = v),
               label: const Text('Selecionar Estratégia'),
             ),
-            const SizedBox(height: 24),
-            ShadSwitch(
-              value: candleClose,
-              onChanged: (v) => setState(() => candleClose = v),
-              label: const Text('Operar Fechamento do Candle?'),
-            ),
+            // const SizedBox(height: 24),
+            // ShadSwitch(
+            //   value: candleClose,
+            //   onChanged: (v) => setState(() => candleClose = v),
+            //   label: const Text('Operar Fechamento do Candle?'),
+            // ),
             const SizedBox(height: 24),
             DropdownButtonFormField<String>(
               value: pattern,

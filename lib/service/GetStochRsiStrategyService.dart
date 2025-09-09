@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-getStochStrategyService(BuildContext context) async {
+getStochRsiStrategyService(BuildContext context) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch-rsi');
 
     var response = await http.get(
       url,

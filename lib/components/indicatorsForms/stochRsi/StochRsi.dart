@@ -3,17 +3,17 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../service/CreateStochStrategyService.dart';
-import '../../../service/GetStochStrategyService.dart';
+import '../../../service/GetStochRsiStrategyService.dart';
 import '../../../service/UpdateStochStrategyService.dart';
 
-class StochForm extends StatefulWidget {
-  const StochForm({super.key});
+class StochRsiForm extends StatefulWidget {
+  const StochRsiForm({super.key});
 
   @override
-  State<StochForm> createState() => _StochFormState();
+  State<StochRsiForm> createState() => _StochRsiFormState();
 }
 
-class _StochFormState extends State<StochForm> {
+class _StochRsiFormState extends State<StochRsiForm> {
   bool selected = false;
   bool crossover = false;
   bool isLoading = true;
@@ -69,7 +69,7 @@ class _StochFormState extends State<StochForm> {
 
   Future<void> _loadStochData() async {
     try {
-      final data = await getStochStrategyService(context);
+      final data = await getStochRsiStrategyService(context);
 
       if (data != null && mounted) {
         setState(() {
