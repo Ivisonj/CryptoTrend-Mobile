@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_requery/flutter_requery.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-updateStochStrategyService(
+updateStochRsiStrategyService(
   BuildContext context,
   bool? selected,
   bool? crossover,
@@ -62,6 +63,8 @@ updateStochStrategyService(
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      queryCache.invalidateQueries('symbols_data');
     } else {
       var errors = jsonDecode(response.body);
       String errorMessage = 'Erro desconhecido';

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../service/CreateStochStrategyService.dart';
+import '../../../service/CreateStochRsiStrategyService.dart';
 import '../../../service/GetStochRsiStrategyService.dart';
-import '../../../service/UpdateStochStrategyService.dart';
+import '../../../service/UpdateStochRsiStrategyService.dart';
 
 class StochRsiForm extends StatefulWidget {
   const StochRsiForm({super.key});
@@ -121,7 +121,7 @@ class _StochRsiFormState extends State<StochRsiForm> {
 
       try {
         if (_hasExistingData) {
-          await updateStochStrategyService(
+          await updateStochRsiStrategyService(
             context,
             selected,
             crossover,
@@ -132,7 +132,7 @@ class _StochRsiFormState extends State<StochRsiForm> {
             oversold,
           );
         } else {
-          await createStochStrategyService(
+          await createStochRsiStrategyService(
             context,
             selected,
             crossover,

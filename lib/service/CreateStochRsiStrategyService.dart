@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_requery/flutter_requery.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-createStochStrategyService(
+createStochRsiStrategyService(
   BuildContext context,
   bool selected,
   bool crossover,
@@ -82,6 +83,8 @@ createStochStrategyService(
         behavior: SnackBarBehavior.floating,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      queryCache.invalidateQueries('symbols_data');
     }
   } catch (e) {
     print('Erro de conexão: ${e.toString()}');

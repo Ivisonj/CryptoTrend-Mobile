@@ -55,6 +55,8 @@ createDmiStrategyService(
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      queryCache.invalidateQueries('symbols_data');
     } else {
       var errors = jsonDecode(response.body);
       String errorMessage = 'Erro desconhecido';
