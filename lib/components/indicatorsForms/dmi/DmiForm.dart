@@ -143,12 +143,12 @@ class _DmiFormState extends State<DmiForm> {
               onChanged: (v) => setState(() => selected = v),
               label: const Text('Selecionar Estratégia'),
             ),
-            const SizedBox(height: 24),
-            ShadSwitch(
-              value: candleClose,
-              onChanged: (v) => setState(() => candleClose = v),
-              label: const Text('Operar Fechamento do Candle?'),
-            ),
+            // const SizedBox(height: 24),
+            // ShadSwitch(
+            //   value: candleClose,
+            //   onChanged: (v) => setState(() => candleClose = v),
+            //   label: const Text('Operar Fechamento do Candle?'),
+            // ),
             const SizedBox(height: 24),
             ShadInputFormField(
               id: 'length',

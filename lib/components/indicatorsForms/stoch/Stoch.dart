@@ -180,12 +180,12 @@ class _StochFormState extends State<StochForm> {
               onChanged: (v) => setState(() => selected = v),
               label: const Text('Selecionar Estratégia'),
             ),
-            const SizedBox(height: 24),
-            ShadSwitch(
-              value: crossover,
-              onChanged: (v) => setState(() => crossover = v),
-              label: const Text('Operar Cruzamento de Médias?'),
-            ),
+            // const SizedBox(height: 24),
+            // ShadSwitch(
+            //   value: crossover,
+            //   onChanged: (v) => setState(() => crossover = v),
+            //   label: const Text('Operar Cruzamento de Médias?'),
+            // ),
             const SizedBox(height: 24),
             ShadInputFormField(
               id: 'length',
