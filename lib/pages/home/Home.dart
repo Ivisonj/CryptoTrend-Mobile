@@ -45,7 +45,6 @@ class _HomeState extends State<Home> {
       _refreshData();
 
       _apiTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
-        print('Chamando API às: ${DateTime.now().toString()}');
         _refreshData();
       });
     });

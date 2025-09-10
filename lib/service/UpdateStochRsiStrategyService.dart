@@ -10,7 +10,8 @@ updateStochRsiStrategyService(
   BuildContext context,
   bool? selected,
   bool? crossover,
-  int? length,
+  int? stochLength,
+  int? rsiLength,
   int? kSmoothing,
   int? dSmoothing,
   int? overbought,
@@ -20,12 +21,13 @@ updateStochRsiStrategyService(
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch-rsi');
 
     Map<String, dynamic> body = {
       'selected': selected,
       'crossover': crossover,
-      'length': length,
+      'stochLength': stochLength,
+      'rsiLength': rsiLength,
       'kSmoothing': kSmoothing,
       'dSmoothing': dSmoothing,
       'overbought': overbought,

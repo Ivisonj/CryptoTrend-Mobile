@@ -21,7 +21,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
   bool _isPremiumUser = false;
 
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController lengthController = TextEditingController();
+  late TextEditingController stochLengthController = TextEditingController();
+  late TextEditingController rsiLengthController = TextEditingController();
   late TextEditingController kSmoothingController = TextEditingController();
   late TextEditingController dSmoothingController = TextEditingController();
   late TextEditingController overboughtController = TextEditingController();
@@ -30,7 +31,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
   @override
   void initState() {
     super.initState();
-    lengthController = TextEditingController();
+    stochLengthController = TextEditingController();
+    rsiLengthController = TextEditingController();
     kSmoothingController = TextEditingController();
     dSmoothingController = TextEditingController();
     overboughtController = TextEditingController();
@@ -39,7 +41,6 @@ class _StochRsiFormState extends State<StochRsiForm> {
   }
 
   Future<void> _loadInitialData() async {
-    // Carrega dados premium e Stoch em paralelo
     await Future.wait([_loadPremiumStatus(), _loadStochData()]);
   }
 
@@ -77,8 +78,11 @@ class _StochRsiFormState extends State<StochRsiForm> {
           selected = data['selected'] ?? false;
           crossover = data['crossover'] ?? false;
 
-          if (data['length'] != null) {
-            lengthController.text = data['length'].toString();
+          if (data['stochLength'] != null) {
+            stochLengthController.text = data['stochLength'].toString();
+          }
+          if (data['rsiLength'] != null) {
+            rsiLengthController.text = data['rsiLength'].toString();
           }
           if (data['kSmoothing'] != null) {
             kSmoothingController.text = data['kSmoothing'].toString();
@@ -113,7 +117,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
 
   Future<void> _saveStochData() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final length = int.parse(lengthController.text.trim());
+      final stochLength = int.parse(stochLengthController.text.trim());
+      final rsiLength = int.parse(rsiLengthController.text.trim());
       final kSmoothing = int.parse(kSmoothingController.text.trim());
       final dSmoothing = int.parse(dSmoothingController.text.trim());
       final overbought = int.parse(overboughtController.text.trim());
@@ -125,7 +130,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
             context,
             selected,
             crossover,
-            length,
+            stochLength,
+            rsiLength,
             kSmoothing,
             dSmoothing,
             overbought,
@@ -136,7 +142,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
             context,
             selected,
             crossover,
-            length,
+            stochLength,
+            rsiLength,
             kSmoothing,
             dSmoothing,
             overbought,
@@ -154,7 +161,8 @@ class _StochRsiFormState extends State<StochRsiForm> {
 
   @override
   void dispose() {
-    lengthController.dispose();
+    stochLengthController.dispose();
+    rsiLengthController.dispose();
     kSmoothingController.dispose();
     dSmoothingController.dispose();
     overboughtController.dispose();
@@ -180,22 +188,45 @@ class _StochRsiFormState extends State<StochRsiForm> {
               onChanged: (v) => setState(() => selected = v),
               label: const Text('Selecionar Estratégia'),
             ),
-            // const SizedBox(height: 24),
-            // ShadSwitch(
-            //   value: crossover,
-            //   onChanged: (v) => setState(() => crossover = v),
-            //   label: const Text('Operar Cruzamento de Médias?'),
-            // ),
+            const SizedBox(height: 24),
+            ShadSwitch(
+              value: crossover,
+              onChanged: (v) => setState(() => crossover = v),
+              label: const Text(
+                'Operar Cruzamento de Médias em Regiões de Sobrecompra e Sobrevenda?',
+              ),
+            ),
             const SizedBox(height: 24),
             ShadInputFormField(
-              id: 'length',
-              label: const Text('Length'),
+              id: 'stochLength',
+              label: const Text('Estocástico Length'),
               placeholder: const Text('Ex: 14'),
-              controller: lengthController,
+              controller: stochLengthController,
               keyboardType: TextInputType.number,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) {
-                  return 'Length é obrigatório';
+                  return 'Estocástico Length é obrigatório';
+                }
+                final intValue = int.tryParse(v.trim());
+                if (intValue == null) {
+                  return 'Deve ser um número válido';
+                }
+                if (intValue <= 0) {
+                  return 'Deve ser um número positivo';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 24),
+            ShadInputFormField(
+              id: 'rsiLength',
+              label: const Text('RSI Length'),
+              placeholder: const Text('Ex: 14'),
+              controller: rsiLengthController,
+              keyboardType: TextInputType.number,
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) {
+                  return 'RSI Length é obrigatório';
                 }
                 final intValue = int.tryParse(v.trim());
                 if (intValue == null) {
