@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:crypttrend/config/env.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_requery/flutter_requery.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-createStochStrategyService(
+createStochRsiStrategyService(
   BuildContext context,
   bool selected,
   bool crossover,
-  int length,
+  int stochLength,
+  int rsiLength,
   int kSmoothing,
   int dSmoothing,
   int overbought,
@@ -19,12 +21,13 @@ createStochStrategyService(
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch-rsi');
 
     Map<String, dynamic> body = {
       'selected': selected,
       'crossover': crossover,
-      'length': length,
+      'stochLength': stochLength,
+      'rsiLength': rsiLength,
       'kSmoothing': kSmoothing,
       'dSmoothing': dSmoothing,
       'overbought': overbought,
@@ -82,6 +85,8 @@ createStochStrategyService(
         behavior: SnackBarBehavior.floating,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      queryCache.invalidateQueries('symbols_data');
     }
   } catch (e) {
     print('Erro de conexão: ${e.toString()}');

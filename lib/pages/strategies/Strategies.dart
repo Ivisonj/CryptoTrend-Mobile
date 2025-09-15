@@ -2,15 +2,15 @@ import 'package:crypttrend/components/header/Header.dart';
 import 'package:crypttrend/components/indicatorsForms/candlesPatterns/candlesPatterns.dart';
 import 'package:crypttrend/components/indicatorsForms/dmi/DmiForm.dart';
 import 'package:crypttrend/components/indicatorsForms/ema/EmaForm.dart';
-import 'package:crypttrend/components/indicatorsForms/stoch/Stoch.dart';
+import 'package:crypttrend/components/indicatorsForms/stochRsi/StochRsi.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 final List<Map<String, dynamic>> details = [
-  {'title': 'Médias Moveis Exponenciais', 'widget': const EmaForm()},
+  {'title': 'Médias Móveis Exponênciais', 'widget': const EmaForm()},
   {'title': 'Di+Di-', 'widget': const DmiForm()},
-  {'title': 'Estocástico', 'widget': const StochForm()},
-  {'title': 'Padrões de Candles', 'widget': const CandlesPatterns()},
+  {'title': 'Estocástico-Rsi', 'widget': const StochRsiForm()},
+  {'title': 'Padões de Candles', 'widget': const CandlesPatterns()},
 ];
 
 class Strategies extends StatelessWidget {

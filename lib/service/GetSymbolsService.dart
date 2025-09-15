@@ -10,7 +10,7 @@ Future<List<Map<String, dynamic>>> getSymbolsService() async {
   final access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/indicatorsCalc');
+    var url = Uri.parse('${Env.baseApiUrl}/symbols/calculated-indicators');
 
     var response = await http.get(
       url,

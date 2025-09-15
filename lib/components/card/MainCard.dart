@@ -72,6 +72,24 @@ class MainCard extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(right: 10),
                         child: ShadIconButton(
+                          icon: const Text('1m'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['oneMinute'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
+                          icon: const Text('5m'),
+                          backgroundColor: _colorForStatus(
+                            timeframes['fiveMinutes'],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: ShadIconButton(
                           icon: const Text('15m'),
                           backgroundColor: _colorForStatus(
                             timeframes['fifteenMinutes'],
