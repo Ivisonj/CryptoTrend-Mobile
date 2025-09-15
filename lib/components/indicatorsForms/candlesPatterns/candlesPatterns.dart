@@ -22,7 +22,7 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
   String pattern = 'engulfing';
 
   final _formKey = GlobalKey<FormState>();
-  final List<String> selectOptions = ['star', 'engulfing'];
+  final List<String> selectOptions = ['star', 'engulfing', 'closeBreak'];
 
   @override
   void initState() {

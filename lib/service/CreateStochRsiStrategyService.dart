@@ -21,7 +21,7 @@ createStochRsiStrategyService(
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch');
+    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch-rsi');
 
     Map<String, dynamic> body = {
       'selected': selected,

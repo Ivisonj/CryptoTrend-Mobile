@@ -51,8 +51,8 @@ class _HomeState extends State<Home> {
   }
 
   DateTime _getNextCallTime(DateTime now) {
-    if (now.second < 20) {
-      return DateTime(now.year, now.month, now.day, now.hour, now.minute, 20);
+    if (now.second < 25) {
+      return DateTime(now.year, now.month, now.day, now.hour, now.minute, 25);
     } else {
       final nextMinute = now.add(const Duration(minutes: 1));
       return DateTime(
