@@ -1,10 +1,11 @@
-import 'package:crypttrend/pages/checkPage/CheckPage.dart';
-import 'package:crypttrend/pages/home/Home.dart';
-import 'package:crypttrend/pages/profile/Profile.dart';
-import 'package:crypttrend/pages/strategies/Strategies.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter_requery/flutter_requery.dart';
+
+import 'pages/checkPage/CheckPage.dart';
+import 'pages/home/Home.dart';
+import 'pages/profile/Profile.dart';
+import 'pages/strategies/Strategies.dart';
 
 void main() {
   runApp(const MyApp());

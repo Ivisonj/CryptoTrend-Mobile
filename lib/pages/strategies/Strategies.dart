@@ -1,10 +1,11 @@
-import 'package:crypttrend/components/header/Header.dart';
-import 'package:crypttrend/components/indicatorsForms/candlesPatterns/candlesPatterns.dart';
-import 'package:crypttrend/components/indicatorsForms/dmi/DmiForm.dart';
-import 'package:crypttrend/components/indicatorsForms/ema/EmaForm.dart';
-import 'package:crypttrend/components/indicatorsForms/stochRsi/StochRsi.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../components/header/Header.dart';
+import '../../components/indicatorsForms/candlesPatterns/candlesPatterns.dart';
+import '../../components/indicatorsForms/dmi/DmiForm.dart';
+import '../../components/indicatorsForms/ema/EmaForm.dart';
+import '../../components/indicatorsForms/stochRsi/StochRsi.dart';
 
 final List<Map<String, dynamic>> details = [
   {'title': 'Médias Móveis Exponênciais', 'widget': const EmaForm()},

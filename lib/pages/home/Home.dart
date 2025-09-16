@@ -1,12 +1,13 @@
-import 'package:crypttrend/components/card/MainCard.dart';
-import 'package:crypttrend/components/header/Header.dart';
-import 'package:crypttrend/service/AddSymbolService.dart';
-import 'package:crypttrend/service/GetSymbolsService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+
+import '../../components/card/MainCard.dart';
+import '../../components/header/Header.dart';
+import '../../service/AddSymbolService.dart';
+import '../../service/GetSymbolsService.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
