@@ -1,12 +1,14 @@
-import 'package:crypttrend/components/card/MainCard.dart';
-import 'package:crypttrend/components/header/Header.dart';
-import 'package:crypttrend/service/AddSymbolService.dart';
-import 'package:crypttrend/service/GetSymbolsService.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+
+import '../../components/card/MainCard.dart';
+import '../../components/header/Header.dart';
+import '../../service/AddSymbolService.dart';
+import '../../service/GetSymbolsService.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,11 +22,15 @@ class _HomeState extends State<Home> {
   static const String symbolsCacheKey = 'symbols_data';
   Timer? _apiTimer;
 
+  static final FirebaseMessaging _firebaseMessaging =
+      FirebaseMessaging.instance;
+
   @override
   void initState() {
     super.initState();
     _symbolInputController = TextEditingController();
     _setupPeriodicApiCall();
+    _requestNotificationPermission();
   }
 
   @override
@@ -32,6 +38,23 @@ class _HomeState extends State<Home> {
     _symbolInputController.dispose();
     _apiTimer?.cancel();
     super.dispose();
+  }
+
+  void _requestNotificationPermission() async {
+    try {
+      NotificationSettings settings = await _firebaseMessaging
+          .requestPermission(
+            alert: true,
+            announcement: false,
+            badge: true,
+            carPlay: false,
+            criticalAlert: false,
+            provisional: false,
+            sound: true,
+          );
+    } catch (error) {
+      print('Erro ao solicitar permissão para notificações: $error');
+    }
   }
 
   void _setupPeriodicApiCall() {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203324410746",
+    "project_id": "cryptrend-176d3",
+    "storage_bucket": "cryptrend-176d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203324410746:android:1c2d952e24e2c754dbe4c3",
+        "android_client_info": {
+          "package_name": "com.example.crypttrend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOFpzp_OJcIlpw_xpUDMQdnSx2UtuHD4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

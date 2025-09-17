@@ -17,14 +17,20 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.5.3
   flutter_requery: ^0.1.16
+  firebase_core: ^4.1.0
+  flutter_local_notifications: ^19.4.2
+  firebase_messaging: ^16.0.1
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
 
   uses-material-design: true
+  assets:
+    - .env
 

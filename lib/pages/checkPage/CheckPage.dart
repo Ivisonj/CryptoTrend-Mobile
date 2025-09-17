@@ -1,8 +1,8 @@
-import 'package:crypttrend/main.dart';
-import 'package:crypttrend/pages/Login/Login.dart';
-import 'package:crypttrend/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
+import '../login/Login.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({super.key});
@@ -15,7 +15,10 @@ class _CheckPageState extends State<CheckPage> {
   @override
   void initState() {
     super.initState();
-    checkLoggedUser();
+    // executa depois do primeiro frame para garantir que o context esteja pronto
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkLoggedUser();
+    });
   }
 
   @override
@@ -23,19 +26,19 @@ class _CheckPageState extends State<CheckPage> {
     return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 
-  checkLoggedUser() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? access_token = sharedPreferences.getString('access_token');
+  Future<void> checkLoggedUser() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final accessToken = sharedPreferences.getString('access_token');
 
-    if (access_token == null) {
+    if (accessToken == null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Login()),
+        MaterialPageRoute(builder: (context) => const Login()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainNav()),
+        MaterialPageRoute(builder: (context) => const MainNav()),
       );
     }
   }

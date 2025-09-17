@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:crypttrend/config/env.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +21,9 @@ updateStochRsiStrategyService(
   String? access_token = sharedPreferences.getString('access_token');
 
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/strategies/stoch-rsi');
+    String? baseApiUrl = dotenv.env['BASE_API_URL'];
+
+    var url = Uri.parse('${baseApiUrl}/strategies/stoch-rsi');
 
     Map<String, dynamic> body = {
       'selected': selected,

@@ -1,11 +1,11 @@
-import 'package:crypttrend/components/header/Header.dart';
-import 'package:crypttrend/pages/checkPage/CheckPage.dart';
-import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../components/header/Header.dart';
+import '../checkPage/CheckPage.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});

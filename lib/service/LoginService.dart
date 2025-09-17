@@ -1,19 +1,26 @@
 import 'dart:convert';
 
-import 'package:crypttrend/config/env.dart';
 import 'package:crypttrend/pages/checkPage/CheckPage.dart';
 import 'package:crypttrend/pages/home/home.dart';
 import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-loginService(context, email, password) async {
+loginService(context, email, password, fcmToken) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  try {
-    var url = Uri.parse('${Env.baseApiUrl}/user/signin');
 
-    Map<String, dynamic> body = {'email': email, 'password': password};
+  try {
+    String? baseApiUrl = dotenv.env['BASE_API_URL'];
+
+    var url = Uri.parse('${baseApiUrl}/user/signin');
+
+    Map<String, dynamic> body = {
+      'email': email,
+      'password': password,
+      'fcmToken': fcmToken,
+    };
 
     var response = await http.post(
       url,
