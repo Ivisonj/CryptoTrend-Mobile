@@ -64,80 +64,133 @@ class MainCard extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 15),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Grupo de timeframes à esquerda
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('1m'),
-                          backgroundColor: _colorForStatus(
-                            timeframes['oneMinute'],
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '1m',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['oneMinute'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('5m'),
-                          backgroundColor: _colorForStatus(
-                            timeframes['fiveMinutes'],
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '5m',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['fiveMinutes'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('15m'),
-                          backgroundColor: _colorForStatus(
-                            timeframes['fifteenMinutes'],
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '15m',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['fifteenMinutes'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('1h'),
-                          backgroundColor: _colorForStatus(
-                            timeframes['oneHour'],
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '1h',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['oneHour'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('4h'),
-                          backgroundColor: _colorForStatus(
-                            timeframes['forHours'],
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '4h',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['forHours'],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: ShadIconButton(
-                          icon: const Text('1d'),
-                          backgroundColor: _colorForStatus(timeframes['daily']),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 4),
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '1d',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['daily'],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      ShadIconButton(
-                        icon: const Text('1S'),
-                        backgroundColor: _colorForStatus(timeframes['weekly']),
-                      ),
-                    ],
-                  ),
-
-                  ShadIconButton(
-                    icon: const Icon(
-                      Icons.delete_outline,
-                      size: 25,
-                      color: Colors.redAccent,
+                        Expanded(
+                          child: Container(
+                            height: 32,
+                            child: ShadIconButton(
+                              icon: const Text(
+                                '1S',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              backgroundColor: _colorForStatus(
+                                timeframes['weekly'],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    backgroundColor: Colors.transparent,
-                    onPressed: () {
-                      deleteSymbolService(context, symbol);
-                    },
+                  ),
+                  // Espaço fixo para o botão de delete
+                  const SizedBox(width: 10),
+                  SizedBox(
+                    width: 40,
+                    height: 32,
+                    child: ShadIconButton(
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        size: 20,
+                        color: Colors.redAccent,
+                      ),
+                      backgroundColor: Colors.transparent,
+                      onPressed: () {
+                        deleteSymbolService(context, symbol);
+                      },
+                    ),
                   ),
                 ],
               ),
