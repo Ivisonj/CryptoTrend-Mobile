@@ -8,14 +8,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-loginService(context, email, password) async {
+loginService(context, email, password, fcmToken) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
   try {
     String? baseApiUrl = dotenv.env['BASE_API_URL'];
 
     var url = Uri.parse('${baseApiUrl}/user/signin');
 
-    Map<String, dynamic> body = {'email': email, 'password': password};
+    Map<String, dynamic> body = {
+      'email': email,
+      'password': password,
+      'fcmToken': fcmToken,
+    };
 
     var response = await http.post(
       url,

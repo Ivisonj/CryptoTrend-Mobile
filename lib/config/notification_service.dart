@@ -24,7 +24,7 @@ class NotificationService {
   }
 
   static Future<void> initializeNotification() async {
-    await _firebaseMessaging.requestPermission();
+    // await _firebaseMessaging.requestPermission();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       await _showFlutterNotification(message);
@@ -34,17 +34,17 @@ class NotificationService {
       print('App opened from background notification: ${message.data}');
     });
 
-    await _getFcmToken();
+    // await _getFcmToken();
 
     await _initializeLocalNotification();
 
     await _getInitialNotification();
   }
 
-  static Future<void> _getFcmToken() async {
-    String? token = await _firebaseMessaging.getToken();
-    print('FCM token: $token');
-  }
+  // static Future<void> _getFcmToken() async {
+  //   String? token = await _firebaseMessaging.getToken();
+  //   print('FCM token: $token');
+  // }
 
   static Future<void> _showFlutterNotification(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;

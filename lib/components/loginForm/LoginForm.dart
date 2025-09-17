@@ -1,6 +1,7 @@
 import 'package:crypttrend/pages/Login/Login.dart';
 import 'package:crypttrend/pages/signup/SignUp.dart';
 import 'package:crypttrend/service/LoginService.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -12,10 +13,14 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  bool isLoading = false;
   bool showPassword = false;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+
+  static final FirebaseMessaging _firebaseMessaging =
+      FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -29,6 +34,54 @@ class _LoginFormState extends State<LoginForm> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<String?> _getFcmToken() async {
+    try {
+      String? token = await _firebaseMessaging.getToken();
+      return token;
+    } catch (e) {
+      print('Erro ao obter FCM token: $e');
+      return null;
+    }
+  }
+
+  Future<void> _handleLogin() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      String? fcmToken = await _getFcmToken();
+
+      await loginService(
+        context,
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+        fcmToken,
+      );
+    } catch (e) {
+      print('Erro no processo de login: $e');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro inesperado: ${e.toString()}'),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 4),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -79,17 +132,22 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 24),
 
             ShadButton(
-              child: const Text('Entrar'),
+              onPressed: isLoading ? null : _handleLogin,
               width: double.infinity,
-              onPressed: () async {
-                if (_formKey.currentState?.validate() ?? false) {
-                  await loginService(
-                    context,
-                    _emailController.text.trim(),
-                    _passwordController.text.trim(),
-                  );
-                }
-              },
+              child: isLoading
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        SizedBox(width: 12),
+                        Text('Entrando...'),
+                      ],
+                    )
+                  : const Text('Entrar'),
             ),
 
             const SizedBox(height: 24),
