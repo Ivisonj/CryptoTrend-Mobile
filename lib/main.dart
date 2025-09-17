@@ -1,13 +1,29 @@
+import 'package:crypttrend/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 
+import 'notification_service.dart';
 import 'pages/checkPage/CheckPage.dart';
 import 'pages/home/Home.dart';
 import 'pages/profile/Profile.dart';
 import 'pages/strategies/Strategies.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  NotificationService.initializeNotification();
+
+  FirebaseMessaging.onBackgroundMessage(
+    NotificationService.firebaseMessagingBackgroundHandle,
+  );
+
   runApp(const MyApp());
 }
 
@@ -84,4 +100,10 @@ class _MainNavState extends State<MainNav> {
       ),
     );
   }
+}
+
+Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  print(
+    'Title: ${message.notification?.title}, Body ${message.notification?.body}',
+  );
 }

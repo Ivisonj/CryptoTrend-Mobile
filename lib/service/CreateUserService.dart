@@ -4,11 +4,14 @@ import 'package:crypttrend/config/env.dart';
 import 'package:crypttrend/pages/home/home.dart';
 import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 createUserService(context, name, email, password) async {
   try {
-    var url = Uri.parse('${Env.baseApiUrl}/user');
+    String? baseApiUrl = dotenv.env['BASE_API_URL'];
+
+    var url = Uri.parse('${baseApiUrl}/user');
 
     Map<String, dynamic> body = {
       'name': name,
