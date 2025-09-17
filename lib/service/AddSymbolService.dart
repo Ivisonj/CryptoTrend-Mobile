@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:crypttrend/config/env.dart';
 import 'package:crypttrend/service/GetSymbolsService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

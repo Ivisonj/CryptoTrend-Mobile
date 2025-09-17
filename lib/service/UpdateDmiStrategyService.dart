@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypttrend/config/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_requery/flutter_requery.dart';

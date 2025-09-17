@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypttrend/config/env.dart';
 import 'package:crypttrend/pages/home/home.dart';
 import 'package:crypttrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
