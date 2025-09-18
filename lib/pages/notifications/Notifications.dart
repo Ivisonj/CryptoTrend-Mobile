@@ -1,5 +1,5 @@
-import 'package:crypttrend/components/notificationCard/NotificationCard.dart';
-import 'package:crypttrend/core/notification/NotificationData.dart';
+import 'package:cryptrend/components/notificationCard/NotificationCard.dart';
+import 'package:cryptrend/core/notification/NotificationData.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/notificationsAppbar/NotificationsAppbar.dart';

@@ -1,6 +1,6 @@
-import 'package:crypttrend/pages/Login/Login.dart';
-import 'package:crypttrend/pages/signup/SignUp.dart';
-import 'package:crypttrend/service/LoginService.dart';
+import 'package:cryptrend/pages/Login/Login.dart';
+import 'package:cryptrend/pages/signup/SignUp.dart';
+import 'package:cryptrend/service/LoginService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';

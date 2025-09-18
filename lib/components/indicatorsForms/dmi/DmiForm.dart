@@ -1,4 +1,4 @@
-import 'package:crypttrend/service/GetDmiStrategyService.dart';
+import 'package:cryptrend/service/GetDmiStrategyService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';

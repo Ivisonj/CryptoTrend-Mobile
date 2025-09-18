@@ -1,5 +1,5 @@
-import 'package:crypttrend/pages/home/home.dart';
-import 'package:crypttrend/service/DeleteSymbolService.dart';
+import 'package:cryptrend/pages/home/home.dart';
+import 'package:cryptrend/service/DeleteSymbolService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -176,7 +176,7 @@ class MainCard extends StatelessWidget {
                     ),
                   ),
                   // Espaço fixo para o botão de delete
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   SizedBox(
                     width: 40,
                     height: 32,

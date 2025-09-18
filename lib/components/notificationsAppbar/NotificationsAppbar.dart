@@ -1,4 +1,4 @@
-import 'package:crypttrend/pages/home/home.dart';
+import 'package:cryptrend/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 

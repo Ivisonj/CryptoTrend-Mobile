@@ -1,10 +1,10 @@
-import 'package:crypttrend/config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 
+import 'config/firebase_options.dart';
 import 'config/notification_service.dart';
 import 'pages/checkPage/CheckPage.dart';
 import 'pages/home/Home.dart';

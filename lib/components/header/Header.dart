@@ -1,4 +1,4 @@
-import 'package:crypttrend/pages/notifications/Notifications.dart';
+import 'package:cryptrend/pages/notifications/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 

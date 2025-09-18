@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:crypttrend/pages/checkPage/CheckPage.dart';
-import 'package:crypttrend/pages/home/home.dart';
-import 'package:crypttrend/pages/login/Login.dart';
+import 'package:cryptrend/pages/checkPage/CheckPage.dart';
+import 'package:cryptrend/pages/home/home.dart';
+import 'package:cryptrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
