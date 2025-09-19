@@ -1,9 +1,11 @@
+import 'package:cryptrend/pages/plans/Plans.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_requery/flutter_requery.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/card/MainCard.dart';
 import '../../components/header/Header.dart';
@@ -21,12 +23,14 @@ class _HomeState extends State<Home> {
   late TextEditingController _symbolInputController;
   static const String symbolsCacheKey = 'symbols_data';
   Timer? _apiTimer;
+  bool _isPremiumUser = false;
 
   @override
   void initState() {
     super.initState();
     _symbolInputController = TextEditingController();
     _setupPeriodicApiCall();
+    _loadPremiumStatus();
   }
 
   @override
@@ -89,6 +93,30 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<void> _loadPremiumStatus() async {
+    try {
+      final isPremium = await _isPremium();
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = isPremium;
+        });
+      }
+    } catch (e) {
+      print('Erro ao verificar status premium: $e');
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = false;
+        });
+      }
+    }
+  }
+
+  Future<bool> _isPremium() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final premium = sharedPreferences.getBool('premium');
+    return premium ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,16 +125,25 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: EdgeInsets.only(top: 20),
-                child: Text(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
                   'Moedas',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-              ),
+
+                if (!_isPremiumUser)
+                  ShadButton.outline(
+                    child: Text('Seja Premium'),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Plans()),
+                    ),
+                  ),
+              ],
             ),
+
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
