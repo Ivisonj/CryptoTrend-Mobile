@@ -59,47 +59,60 @@ class _StrategiesState extends State<Strategies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Estratégias',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
+      body: Stack(
+        children: [
+          // Header fixo no topo (posição absoluta)
+          Positioned(top: 0, left: 0, right: 0, child: Header()),
 
-                if (!_isPremiumUser)
-                  ShadButton.outline(
-                    child: Text('Seja Premium'),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Plans()),
+          // Conteúdo principal com padding top para não sobrepor o header
+          Positioned.fill(
+            top: kToolbarHeight, // Espaço para o header
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Estratégias',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      if (!_isPremiumUser)
+                        ShadButton.outline(
+                          child: Text('Seja Premium'),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Plans()),
+                          ),
+                        ),
+                    ],
+                  ),
+
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ShadAccordion(
+                        children: details
+                            .map(
+                              (detail) => ShadAccordionItem(
+                                value: detail['title'],
+                                title: Text(detail['title']),
+                                child: detail['widget'],
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
-              ],
-            ),
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: ShadAccordion(
-                  children: details
-                      .map(
-                        (detail) => ShadAccordionItem(
-                          value: detail['title'],
-                          title: Text(detail['title']),
-                          child: detail['widget'],
-                        ),
-                      )
-                      .toList(),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
