@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class PlanCard extends StatelessWidget {
   final String planName;
   final String duration;
   final String currentPrice;
   final String oldPrice;
-  final String discount;
+  final String? discount;
   final VoidCallback onSubscribe;
 
   const PlanCard({
@@ -21,24 +22,17 @@ class PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade700),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Título do plano
             Text(
               planName,
               style: const TextStyle(
@@ -49,7 +43,6 @@ class PlanCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
 
-            // Duração do plano
             Text(
               duration,
               style: TextStyle(
@@ -60,7 +53,6 @@ class PlanCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Row com preço atual e desconto
             Row(
               children: [
                 // Preço atual
@@ -74,7 +66,6 @@ class PlanCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
 
-                // Badge de desconto
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -97,7 +88,6 @@ class PlanCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Preço antigo (riscado)
             Text(
               'De $oldPrice',
               style: TextStyle(
@@ -110,7 +100,6 @@ class PlanCard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Botão de assinar
             SizedBox(
               width: double.infinity,
               height: 35,
