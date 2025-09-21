@@ -1,4 +1,3 @@
-import 'package:cryptrend/components/notificationsAppbar/NotificationsAppbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/planCard/PlanCard.dart';
@@ -34,22 +33,17 @@ class Plans extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: const NotificationsAppbar(),
+      appBar: AppBar(
+        title: const Text(
+          'Planos',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Planos',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Lista de cards dos planos
             Expanded(
               child: ListView.builder(
                 itemCount: plansData.length,
