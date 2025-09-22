@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 class PlanCard extends StatelessWidget {
-  final String planName;
-  final String duration;
-  final String currentPrice;
-  final String oldPrice;
-  final String? discount;
+  final String id;
+  final String name;
+  final int duration;
+  final double currentPrice;
+  final double? oldPrice;
+  final int? discount;
   final VoidCallback onSubscribe;
 
   const PlanCard({
     super.key,
-    required this.planName,
+    required this.id,
+    required this.name,
     required this.duration,
     required this.currentPrice,
-    required this.oldPrice,
-    required this.discount,
+    this.oldPrice,
+    this.discount,
     required this.onSubscribe,
   });
 
@@ -34,7 +36,7 @@ class PlanCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              planName,
+              name,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -44,7 +46,7 @@ class PlanCard extends StatelessWidget {
             const SizedBox(height: 4),
 
             Text(
-              duration,
+              '${duration} ${duration == 1 ? 'mês' : 'meses'}',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey.shade400,
@@ -57,7 +59,7 @@ class PlanCard extends StatelessWidget {
               children: [
                 // Preço atual
                 Text(
-                  currentPrice,
+                  'R\$ ${currentPrice.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -66,38 +68,42 @@ class PlanCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
 
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '-$discount',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                // Badge de desconto (só aparece se há desconto)
+                if (discount != null && discount! > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '-${discount}%',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             const SizedBox(height: 8),
 
-            Text(
-              'De $oldPrice',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.red.shade600,
-                decoration: TextDecoration.lineThrough,
-                decorationColor: Colors.red.shade600,
-                decorationThickness: 2,
+            // Preço antigo (só aparece se há desconto)
+            if (oldPrice != null)
+              Text(
+                'De R\$ ${oldPrice!.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.red.shade600,
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: Colors.red.shade600,
+                  decorationThickness: 2,
+                ),
               ),
-            ),
             const SizedBox(height: 20),
 
             SizedBox(
