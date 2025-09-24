@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_requery/flutter_requery.dart';
 
 import 'config/firebase_options.dart';
 import 'config/notification_service.dart';
@@ -12,10 +12,11 @@ import 'pages/profile/Profile.dart';
 import 'pages/strategies/Strategies.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   NotificationService.initializeNotification();
@@ -23,6 +24,9 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(
     NotificationService.firebaseMessagingBackgroundHandle,
   );
+
+  Stripe.publishableKey =
+      'pk_test_51S8M7J9EL4tAIsXURfMiBGeisYUjbKcuptyXI2ilUlEG3YxcI0s7ukRBayrirzDOlohfnNyX4QVC4eDQd5R1V6WE00tE1V9Hpn';
 
   runApp(const MyApp());
 }
@@ -100,10 +104,4 @@ class _MainNavState extends State<MainNav> {
       ),
     );
   }
-}
-
-Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  print(
-    'Title: ${message.notification?.title}, Body ${message.notification?.body}',
-  );
 }

@@ -1,65 +1,73 @@
 import 'dart:convert';
-
 import 'package:cryptrend/pages/checkPage/CheckPage.dart';
-import 'package:cryptrend/pages/home/home.dart';
-import 'package:cryptrend/pages/login/Login.dart';
+import 'package:cryptrend/service/GetSymbolsService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-loginService(context, email, password, fcmToken) async {
+createUserSubscriptionService(BuildContext context, String planId) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String? access_token = sharedPreferences.getString('access_token');
 
   try {
     String? baseApiUrl = dotenv.env['BASE_API_URL'];
 
-    var url = Uri.parse('${baseApiUrl}/user/signin');
+    var url = Uri.parse('${baseApiUrl}/user-subscription');
 
-    Map<String, dynamic> body = {
-      'email': email,
-      'password': password,
-      'fcmToken': fcmToken,
-    };
+    Map<String, dynamic> body = {'planId': planId};
 
     var response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Authorization': 'Bearer ${access_token.toString()}',
       },
       body: jsonEncode(body),
     );
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
+    print('planId : ${planId}');
 
-      final String access_token = data['access_token'];
-      final String name = data['name'];
-      final String email = data['email'];
-      final bool premium = (data['premium'] is bool)
-          ? data['premium'] as bool
-          : (data['premium']?.toString() == 'true');
+    if (response.statusCode == 201) {
+      var responseData = jsonDecode(response.body);
+      String successMessage = 'Sucesso!';
 
-      if (access_token != null) {
-        await sharedPreferences.setString('access_token', access_token);
-        await sharedPreferences.setString('name', name);
-        await sharedPreferences.setString('email', email);
-        await sharedPreferences.setBool('premium', premium);
+      if (responseData is Map && responseData.containsKey('message')) {
+        var message = responseData['message'];
+        if (message is List) {
+          successMessage = message.join('\n');
+        } else {
+          successMessage = message.toString();
+        }
       }
 
-      Navigator.pushAndRemoveUntil(
+      var snackBar = SnackBar(
+        content: Text(successMessage),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      await sharedPreferences.clear();
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => CheckPage()),
-        (Route<dynamic> route) => false,
       );
     } else {
       var errors = jsonDecode(response.body);
-
       String errorMessage = 'Erro desconhecido';
 
       if (errors is Map && errors.containsKey('message')) {
-        errorMessage = errors['message'];
+        var message = errors['message'];
+        if (message is List) {
+          errorMessage = message.join('\n');
+        } else {
+          errorMessage = message.toString();
+        }
       }
 
       var snackBar = SnackBar(
@@ -71,6 +79,7 @@ loginService(context, email, password, fcmToken) async {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   } catch (e) {
+    print('Erro de conexão: ${e.toString()}');
     var snackBar = SnackBar(
       content: Text('Erro de conexão: ${e.toString()}'),
       backgroundColor: Colors.redAccent,

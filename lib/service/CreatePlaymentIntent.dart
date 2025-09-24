@@ -1,58 +1,48 @@
 import 'dart:convert';
 
-import 'package:cryptrend/pages/checkPage/CheckPage.dart';
-import 'package:cryptrend/pages/home/home.dart';
-import 'package:cryptrend/pages/login/Login.dart';
+import 'package:cryptrend/service/createUserSubscriptionService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-loginService(context, email, password, fcmToken) async {
+createPaymentIntent(context, planId) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String? access_token = sharedPreferences.getString('access_token');
 
   try {
     String? baseApiUrl = dotenv.env['BASE_API_URL'];
 
-    var url = Uri.parse('${baseApiUrl}/user/signin');
+    var url = Uri.parse('${baseApiUrl}/payment');
 
-    Map<String, dynamic> body = {
-      'email': email,
-      'password': password,
-      'fcmToken': fcmToken,
-    };
+    Map<String, dynamic> body = {'planId': planId};
 
     var response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Authorization': 'Bearer ${access_token.toString()}',
       },
       body: jsonEncode(body),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-      final String access_token = data['access_token'];
-      final String name = data['name'];
-      final String email = data['email'];
-      final bool premium = (data['premium'] is bool)
-          ? data['premium'] as bool
-          : (data['premium']?.toString() == 'true');
+      final clientSecret = data['clientSecret'];
 
-      if (access_token != null) {
-        await sharedPreferences.setString('access_token', access_token);
-        await sharedPreferences.setString('name', name);
-        await sharedPreferences.setString('email', email);
-        await sharedPreferences.setBool('premium', premium);
-      }
-
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => CheckPage()),
-        (Route<dynamic> route) => false,
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'CrypTrend',
+        ),
       );
+
+      await Stripe.instance.presentPaymentSheet();
+
+      await createUserSubscriptionService(context, planId);
     } else {
       var errors = jsonDecode(response.body);
 

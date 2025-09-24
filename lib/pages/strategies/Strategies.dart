@@ -59,14 +59,11 @@ class _StrategiesState extends State<Strategies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const Header(),
       body: Stack(
         children: [
-          // Header fixo no topo (posição absoluta)
-          Positioned(top: 0, left: 0, right: 0, child: Header()),
-
-          // Conteúdo principal com padding top para não sobrepor o header
           Positioned.fill(
-            top: kToolbarHeight, // Espaço para o header
+            top: kToolbarHeight,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(

@@ -2,17 +2,16 @@ import 'package:cryptrend/pages/notifications/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatelessWidget implements PreferredSizeWidget {
   const Header({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: kToolbarHeight,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: const BoxDecoration(color: Colors.transparent),
-      child: Row(
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text(
@@ -23,7 +22,6 @@ class Header extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
             child: Row(
@@ -56,4 +54,7 @@ class Header extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
