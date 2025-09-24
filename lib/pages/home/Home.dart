@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
   static const String symbolsCacheKey = 'symbols_data';
   Timer? _apiTimer;
   bool _isPremiumUser = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -76,6 +77,9 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _addSymbol() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       await addSymbolService(context, _symbolInputController.text);
       _symbolInputController.clear();
@@ -89,6 +93,12 @@ class _HomeState extends State<Home> {
           behavior: SnackBarBehavior.floating,
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -208,7 +218,7 @@ class _HomeState extends State<Home> {
                           );
                         }
 
-                        if (response.loading) {
+                        if (response.loading || isLoading) {
                           return const Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
