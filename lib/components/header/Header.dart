@@ -14,14 +14,12 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'CrypTrend',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
+          SizedBox(
+            width: 100,
+            height: 50,
+            child: Image.asset('assets/image/logo.png'),
           ),
+
           Padding(
             padding: const EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
             child: Row(
