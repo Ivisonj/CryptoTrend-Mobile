@@ -25,8 +25,9 @@ Future<void> main() async {
     NotificationService.firebaseMessagingBackgroundHandle,
   );
 
-  Stripe.publishableKey =
-      'pk_test_51S8M7J9EL4tAIsXURfMiBGeisYUjbKcuptyXI2ilUlEG3YxcI0s7ukRBayrirzDOlohfnNyX4QVC4eDQd5R1V6WE00tE1V9Hpn';
+  String? publishableKey = dotenv.env['STRIPE_PUBLIC_KEY'];
+
+  Stripe.publishableKey = publishableKey!;
 
   runApp(const MyApp());
 }

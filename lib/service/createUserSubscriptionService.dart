@@ -27,8 +27,6 @@ createUserSubscriptionService(BuildContext context, String planId) async {
       body: jsonEncode(body),
     );
 
-    print('planId : ${planId}');
-
     if (response.statusCode == 201) {
       var responseData = jsonDecode(response.body);
       String successMessage = 'Sucesso!';

@@ -141,10 +141,11 @@ class _LoginFormState extends State<LoginForm> {
                         SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.black,
+                          ),
                         ),
-                        SizedBox(width: 12),
-                        Text('Entrando...'),
                       ],
                     )
                   : const Text('Entrar'),
