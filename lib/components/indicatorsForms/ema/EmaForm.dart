@@ -16,6 +16,7 @@ class _EmaFormState extends State<EmaForm> {
   bool candleClose = false;
   bool isLoading = true;
   bool _hasExistingData = false;
+  bool isSalving = false;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController ema1Controller = TextEditingController();
@@ -72,6 +73,10 @@ class _EmaFormState extends State<EmaForm> {
       final ema1 = int.parse(ema1Controller.text.trim());
       final ema2 = int.parse(ema2Controller.text.trim());
 
+      setState(() {
+        isSalving = true;
+      });
+
       try {
         if (_hasExistingData) {
           await updateEmaStrategyService(
@@ -97,6 +102,12 @@ class _EmaFormState extends State<EmaForm> {
         }
       } catch (e) {
         print('Erro ao salvar dados da EMA: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            isSalving = false;
+          });
+        }
       }
     }
   }
@@ -201,8 +212,22 @@ class _EmaFormState extends State<EmaForm> {
             ),
             const SizedBox(height: 24),
             ShadButton(
-              child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
               onPressed: _saveEmaData,
+              child: isSalving
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(_hasExistingData ? 'Salvar' : 'Criar'),
             ),
           ],
         ),

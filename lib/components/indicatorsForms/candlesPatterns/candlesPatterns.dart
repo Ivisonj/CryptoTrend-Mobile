@@ -20,6 +20,7 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
   bool _hasExistingData = false;
   bool _isPremiumUser = false;
   String pattern = 'engulfing';
+  bool isSalving = false;
 
   final _formKey = GlobalKey<FormState>();
   final List<String> selectOptions = ['star', 'engulfing', 'closeBreak'];
@@ -89,6 +90,10 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
 
   Future<void> _saveCandlesPatternsData() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        isSalving = true;
+      });
+
       try {
         if (_hasExistingData) {
           await updateCandlesPatternsStrategyService(
@@ -110,6 +115,12 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
         }
       } catch (e) {
         print('Erro ao salvar dados dos Padrões de Candles: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            isSalving = false;
+          });
+        }
       }
     }
   }
@@ -174,8 +185,22 @@ class _CandlesPatternsState extends State<CandlesPatterns> {
 
             if (_isPremiumUser)
               ShadButton(
-                child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
                 onPressed: _saveCandlesPatternsData,
+                child: isSalving
+                    ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(_hasExistingData ? 'Salvar' : 'Criar'),
               ),
 
             if (!_isPremiumUser)
