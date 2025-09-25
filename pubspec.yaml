@@ -22,6 +22,8 @@ dependencies:
   firebase_messaging: ^16.0.1
   flutter_dotenv: ^6.0.0
   flutter_stripe: ^12.0.2
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +35,19 @@ flutter:
 
   uses-material-design: true
   assets:
-    - assets/image/
+    - assets/icon/
     - .env
 
+flutter_native_splash:
+  color: "#080c1c"
+  image: "assets/icon/icon-transparent.png"
+  android: true
+  ios: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/icon/icon.png"
+  image_path_ios: "assets/icon/icon.png"
+  adaptive_icon_background: "#080c1c"       
+  adaptive_icon_foreground: "assets/icon/icon-transparent.png"

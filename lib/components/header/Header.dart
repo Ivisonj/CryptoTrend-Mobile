@@ -17,7 +17,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(
             width: 100,
             height: 50,
-            child: Image.asset('assets/image/logo.png'),
+            child: Image.asset('assets/icon/logo.png'),
           ),
 
           Padding(
