@@ -22,8 +22,6 @@ Future<List<Map<String, dynamic>>> getPlansService() async {
       },
     );
 
-    print(response);
-
     final bodyStr = response.body;
 
     if (bodyStr.isEmpty) {

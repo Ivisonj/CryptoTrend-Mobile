@@ -47,7 +47,6 @@ class Profile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Seu Avatar
                       CircleAvatar(
                         radius: 60,
                         backgroundImage: NetworkImage(

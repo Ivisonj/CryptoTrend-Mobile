@@ -15,7 +15,6 @@ class _CheckPageState extends State<CheckPage> {
   @override
   void initState() {
     super.initState();
-    // executa depois do primeiro frame para garantir que o context esteja pronto
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkLoggedUser();
     });

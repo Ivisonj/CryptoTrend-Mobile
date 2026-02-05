@@ -36,7 +36,7 @@ class _PlansState extends State<Plans> {
             Expanded(
               child: Query<List<Map<String, dynamic>>>(
                 plansCacheKey,
-                future: getPlansService,
+                future: () => getPlansService(),
                 builder: (context, response) {
                   if (response.error != null) {
                     return Center(
@@ -87,29 +87,29 @@ class _PlansState extends State<Plans> {
                     );
                   }
 
-                  if (response.data == null || response.data!.isEmpty) {
-                    return const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.payment_outlined,
-                            size: 64,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Nenhum plano disponível',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+                  // if (response.data == null || response.data!.isEmpty) {
+                  //   return const Center(
+                  //     child: Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Icon(
+                  //           Icons.payment_outlined,
+                  //           size: 64,
+                  //           color: Colors.grey,
+                  //         ),
+                  //         SizedBox(height: 16),
+                  //         Text(
+                  //           'Nenhum plano disponível',
+                  //           style: TextStyle(
+                  //             color: Colors.grey,
+                  //             fontSize: 18,
+                  //             fontWeight: FontWeight.w500,
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   );
+                  // }
 
                   return RefreshIndicator(
                     onRefresh: () async => _refreshData(),

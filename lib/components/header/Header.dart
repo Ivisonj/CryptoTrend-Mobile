@@ -25,21 +25,21 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ShadIconButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Notifications(),
-                    ),
-                  ),
-                  icon: const Icon(
-                    LucideIcons.bell,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  backgroundColor: Colors.transparent,
-                ),
-                const SizedBox(width: 8.0),
+                // ShadIconButton(
+                //   onPressed: () => Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const Notifications(),
+                //     ),
+                //   ),
+                //   icon: const Icon(
+                //     LucideIcons.bell,
+                //     color: Colors.white,
+                //     size: 20,
+                //   ),
+                //   backgroundColor: Colors.transparent,
+                // ),
+                // const SizedBox(width: 8.0),
                 ShadAvatar(
                   'https://app.requestly.io/delay/2000/avatars.githubusercontent.com/u/124599?v=4',
                   size: const Size(50, 50),
