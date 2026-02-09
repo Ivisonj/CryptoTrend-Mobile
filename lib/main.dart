@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config/firebase_options.dart';
 import 'config/notification_service.dart';
@@ -10,6 +11,7 @@ import 'pages/checkPage/CheckPage.dart';
 import 'pages/home/Home.dart';
 import 'pages/profile/Profile.dart';
 import 'pages/strategies/Strategies.dart';
+import 'pages/chat/chat.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
@@ -18,6 +20,11 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
 
   NotificationService.initializeNotification();
 
@@ -72,6 +79,7 @@ class _MainNavState extends State<MainNav> {
   late final List<Widget> _pages = <Widget>[
     const Home(),
     const Strategies(),
+    const ChatPage(),
     const Profile(),
   ];
 
@@ -99,6 +107,10 @@ class _MainNavState extends State<MainNav> {
           BottomNavigationBarItem(
             icon: Icon(Icons.swap_horiz),
             label: 'Strategies',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline),
+            label: 'Chat IA',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],

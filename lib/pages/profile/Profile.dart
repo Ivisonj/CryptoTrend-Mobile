@@ -14,6 +14,7 @@ class Profile extends StatelessWidget {
     final sharedPreferences = await SharedPreferences.getInstance();
     final name = sharedPreferences.getString('name');
     final email = sharedPreferences.getString('email');
+
     return {'name': name, 'email': email};
   }
 

@@ -36,6 +36,7 @@ loginService(context, email, password, fcmToken) async {
 
       final String access_token = data['access_token'];
       final String name = data['name'];
+      final String chatId = data['chatId'];
       final String email = data['email'];
       final bool premium = (data['premium'] is bool)
           ? data['premium'] as bool
@@ -46,6 +47,7 @@ loginService(context, email, password, fcmToken) async {
         await sharedPreferences.setString('name', name);
         await sharedPreferences.setString('email', email);
         await sharedPreferences.setBool('premium', premium);
+        await sharedPreferences.setString('chatId', chatId);
       }
 
       Navigator.pushAndRemoveUntil(
