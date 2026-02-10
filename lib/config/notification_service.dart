@@ -1,8 +1,9 @@
-import 'package:crypttrend/config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart';
+
+import 'firebase_options.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -24,7 +25,7 @@ class NotificationService {
   }
 
   static Future<void> initializeNotification() async {
-    // await _firebaseMessaging.requestPermission();
+    await _firebaseMessaging.requestPermission();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       await _showFlutterNotification(message);

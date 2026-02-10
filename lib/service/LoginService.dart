@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:crypttrend/pages/checkPage/CheckPage.dart';
-import 'package:crypttrend/pages/home/home.dart';
-import 'package:crypttrend/pages/login/Login.dart';
+import 'package:cryptrend/pages/checkPage/CheckPage.dart';
+import 'package:cryptrend/pages/home/home.dart';
+import 'package:cryptrend/pages/login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -36,6 +36,7 @@ loginService(context, email, password, fcmToken) async {
 
       final String access_token = data['access_token'];
       final String name = data['name'];
+      final String chatId = data['chatId'];
       final String email = data['email'];
       final bool premium = (data['premium'] is bool)
           ? data['premium'] as bool
@@ -46,11 +47,13 @@ loginService(context, email, password, fcmToken) async {
         await sharedPreferences.setString('name', name);
         await sharedPreferences.setString('email', email);
         await sharedPreferences.setBool('premium', premium);
+        await sharedPreferences.setString('chatId', chatId);
       }
 
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => CheckPage()),
+        (Route<dynamic> route) => false,
       );
     } else {
       var errors = jsonDecode(response.body);

@@ -1,6 +1,6 @@
-import 'package:crypttrend/pages/login/Login.dart';
-import 'package:crypttrend/pages/signup/SignUp.dart';
-import 'package:crypttrend/service/CreateUserService.dart';
+import 'package:cryptrend/pages/login/Login.dart';
+import 'package:cryptrend/pages/signup/SignUp.dart';
+import 'package:cryptrend/service/CreateUserService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -13,6 +13,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   bool showPassword = false;
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _emailController;
@@ -32,6 +33,42 @@ class _SignUpFormState extends State<SignUpForm> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleSignUpForm() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      await createUserService(
+        context,
+        _nameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+    } catch (e) {
+      print('Erro no processo de login: $e');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro inesperado: ${e.toString()}'),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 4),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -95,21 +132,24 @@ class _SignUpFormState extends State<SignUpForm> {
 
             const SizedBox(height: 24),
 
-            // No seu ShadButton dentro do SignUpForm
             ShadButton(
-              child: const Text('Criar Conta'),
               width: double.infinity,
-              onPressed: () async {
-                if (_formKey.currentState?.validate() ?? false) {
-                  // Usar a função com loading integrado
-                  await createUserService(
-                    context,
-                    _nameController.text.trim(),
-                    _emailController.text.trim(),
-                    _passwordController.text.trim(),
-                  );
-                }
-              },
+              onPressed: isLoading ? null : _handleSignUpForm,
+              child: isLoading
+                  ? const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Text('Criar Conta'),
             ),
 
             const SizedBox(height: 24),

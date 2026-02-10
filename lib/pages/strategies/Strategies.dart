@@ -1,5 +1,7 @@
+import 'package:cryptrend/pages/plans/Plans.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/header/Header.dart';
 import '../../components/indicatorsForms/candlesPatterns/candlesPatterns.dart';
@@ -14,44 +16,100 @@ final List<Map<String, dynamic>> details = [
   {'title': 'Padões de Candles', 'widget': const CandlesPatterns()},
 ];
 
-class Strategies extends StatelessWidget {
+class Strategies extends StatefulWidget {
   const Strategies({super.key});
+
+  @override
+  State<Strategies> createState() => _StrategiesState();
+}
+
+class _StrategiesState extends State<Strategies> {
+  bool _isPremiumUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPremiumStatus();
+  }
+
+  Future<void> _loadPremiumStatus() async {
+    try {
+      final isPremium = await _isPremium();
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = isPremium;
+        });
+      }
+    } catch (e) {
+      print('Erro ao verificar status premium: $e');
+      if (mounted) {
+        setState(() {
+          _isPremiumUser = false;
+        });
+      }
+    }
+  }
+
+  Future<bool> _isPremium() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final premium = sharedPreferences.getBool('premium');
+    return premium ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: EdgeInsets.only(top: 20, bottom: 20),
-                child: Text(
-                  'Estratégias',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: ShadAccordion(
-                  children: details
-                      .map(
-                        (detail) => ShadAccordionItem(
-                          value: detail['title'],
-                          title: Text(detail['title']),
-                          child: detail['widget'],
+      appBar: const Header(),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            top: kToolbarHeight,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Estratégias',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
                         ),
-                      )
-                      .toList(),
-                ),
+                      ),
+
+                      if (!_isPremiumUser)
+                        ShadButton.outline(
+                          child: Text('Seja Premium'),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Plans()),
+                          ),
+                        ),
+                    ],
+                  ),
+
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ShadAccordion(
+                        children: details
+                            .map(
+                              (detail) => ShadAccordionItem(
+                                value: detail['title'],
+                                title: Text(detail['title']),
+                                child: detail['widget'],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

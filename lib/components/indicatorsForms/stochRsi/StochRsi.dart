@@ -19,6 +19,7 @@ class _StochRsiFormState extends State<StochRsiForm> {
   bool isLoading = true;
   bool _hasExistingData = false;
   bool _isPremiumUser = false;
+  bool isSalving = false;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController stochLengthController = TextEditingController();
@@ -124,6 +125,10 @@ class _StochRsiFormState extends State<StochRsiForm> {
       final overbought = int.parse(overboughtController.text.trim());
       final oversold = int.parse(oversoldController.text.trim());
 
+      setState(() {
+        isSalving = true;
+      });
+
       try {
         if (_hasExistingData) {
           await updateStochRsiStrategyService(
@@ -155,6 +160,12 @@ class _StochRsiFormState extends State<StochRsiForm> {
         }
       } catch (e) {
         print('Erro ao salvar dados do Stoch: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            isSalving = false;
+          });
+        }
       }
     }
   }
@@ -336,11 +347,24 @@ class _StochRsiFormState extends State<StochRsiForm> {
             ),
             const SizedBox(height: 24),
 
-            // Correção principal: usar a variável de estado ao invés da função
             if (_isPremiumUser)
               ShadButton(
-                child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
                 onPressed: _saveStochData,
+                child: isSalving
+                    ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(_hasExistingData ? 'Salvar' : 'Criar'),
               ),
 
             if (!_isPremiumUser)

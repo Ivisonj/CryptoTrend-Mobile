@@ -1,28 +1,40 @@
-import 'package:crypttrend/config/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_requery/flutter_requery.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'config/firebase_options.dart';
 import 'config/notification_service.dart';
 import 'pages/checkPage/CheckPage.dart';
 import 'pages/home/Home.dart';
 import 'pages/profile/Profile.dart';
 import 'pages/strategies/Strategies.dart';
+import 'pages/chat/chat.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
 
   NotificationService.initializeNotification();
 
   FirebaseMessaging.onBackgroundMessage(
     NotificationService.firebaseMessagingBackgroundHandle,
   );
+
+  String? publishableKey = dotenv.env['STRIPE_PUBLIC_KEY'];
+
+  Stripe.publishableKey = publishableKey!;
 
   runApp(const MyApp());
 }
@@ -67,6 +79,7 @@ class _MainNavState extends State<MainNav> {
   late final List<Widget> _pages = <Widget>[
     const Home(),
     const Strategies(),
+    const ChatPage(),
     const Profile(),
   ];
 
@@ -95,15 +108,13 @@ class _MainNavState extends State<MainNav> {
             icon: Icon(Icons.swap_horiz),
             label: 'Strategies',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline),
+            label: 'Chat IA',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
   }
-}
-
-Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  print(
-    'Title: ${message.notification?.title}, Body ${message.notification?.body}',
-  );
 }

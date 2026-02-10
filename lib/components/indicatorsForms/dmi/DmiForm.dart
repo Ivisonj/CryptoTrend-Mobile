@@ -1,4 +1,4 @@
-import 'package:crypttrend/service/GetDmiStrategyService.dart';
+import 'package:cryptrend/service/GetDmiStrategyService.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +19,7 @@ class _DmiFormState extends State<DmiForm> {
   bool isLoading = true;
   bool _hasExistingData = false;
   bool _isPremiumUser = false;
+  bool isSalving = false;
 
   final _formKey = GlobalKey<FormState>();
   late TextEditingController lengthController = TextEditingController();
@@ -94,6 +95,10 @@ class _DmiFormState extends State<DmiForm> {
     if (_formKey.currentState?.validate() ?? false) {
       final length = int.parse(lengthController.text.trim());
 
+      setState(() {
+        isSalving = true;
+      });
+
       try {
         if (_hasExistingData) {
           await updateDmiStrategyService(
@@ -115,6 +120,12 @@ class _DmiFormState extends State<DmiForm> {
         }
       } catch (e) {
         print('Erro ao salvar dados do DMI: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            isSalving = false;
+          });
+        }
       }
     }
   }
@@ -172,11 +183,24 @@ class _DmiFormState extends State<DmiForm> {
             ),
             const SizedBox(height: 24),
 
-            // Correção principal: usar a variável de estado ao invés da função
             if (_isPremiumUser)
               ShadButton(
-                child: Text(_hasExistingData ? 'Salvar' : 'Criar'),
                 onPressed: _saveDmiData,
+                child: isSalving
+                    ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(_hasExistingData ? 'Salvar' : 'Criar'),
               ),
 
             // Alternativa: mostrar mensagem para usuários não premium

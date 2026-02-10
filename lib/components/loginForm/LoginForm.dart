@@ -1,6 +1,6 @@
-import 'package:crypttrend/pages/Login/Login.dart';
-import 'package:crypttrend/pages/signup/SignUp.dart';
-import 'package:crypttrend/service/LoginService.dart';
+import 'package:cryptrend/pages/Login/Login.dart';
+import 'package:cryptrend/pages/signup/SignUp.dart';
+import 'package:cryptrend/service/LoginService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -141,10 +141,11 @@ class _LoginFormState extends State<LoginForm> {
                         SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.black,
+                          ),
                         ),
-                        SizedBox(width: 12),
-                        Text('Entrando...'),
                       ],
                     )
                   : const Text('Entrar'),

@@ -14,69 +14,79 @@ class Profile extends StatelessWidget {
     final sharedPreferences = await SharedPreferences.getInstance();
     final name = sharedPreferences.getString('name');
     final email = sharedPreferences.getString('email');
+
     return {'name': name, 'email': email};
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(),
-      body: FutureBuilder<Map<String, String?>>(
-        future: _getUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Header(),
 
-          if (!snapshot.hasData) {
-            return const Center(child: Text("Erro ao carregar perfil"));
-          }
+          Expanded(
+            child: FutureBuilder<Map<String, String?>>(
+              future: _getUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final user = snapshot.data!;
-          final name = user['name'] ?? 'Sem nome';
-          final email = user['email'] ?? 'Sem email';
+                if (!snapshot.hasData) {
+                  return const Center(child: Text("Erro ao carregar perfil"));
+                }
 
-          return Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Seu Avatar
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: NetworkImage(
-                    'https://avatars.githubusercontent.com/u/124599?v=4',
-                  ),
-                ),
+                final user = snapshot.data!;
+                final name = user['name'] ?? 'Sem nome';
+                final email = user['email'] ?? 'Sem email';
 
-                const SizedBox(height: 15),
-
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(email, style: const TextStyle(fontSize: 20)),
-
-                const SizedBox(height: 50),
-
-                SizedBox(
+                return Container(
                   width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () => logout(context),
-                    icon: const Icon(Icons.power_settings_new, size: 20),
-                    label: const Text('Sair', style: TextStyle(fontSize: 20)),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 60,
+                        backgroundImage: NetworkImage(
+                          'https://avatars.githubusercontent.com/u/124599?v=4',
+                        ),
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(email, style: const TextStyle(fontSize: 20)),
+
+                      const SizedBox(height: 50),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () => logout(context),
+                          icon: const Icon(Icons.power_settings_new, size: 20),
+                          label: const Text(
+                            'Sair',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
