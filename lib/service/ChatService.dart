@@ -15,7 +15,7 @@ class ChatService {
 
       var url = Uri.parse('${baseApiUrl}');
 
-      Map<String, dynamic> body = {'chat_id': chatId, 'message': message};
+      Map<String, dynamic> body = {'chatId': chatId, 'message': message};
 
       var response = await http.post(
         url,

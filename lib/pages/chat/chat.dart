@@ -1,11 +1,12 @@
-// lib/pages/chat_page.dart
+import 'package:cryptrend/components/chatInput/chatInput.dart';
+import 'package:cryptrend/components/messagebubble/messagebubble.dart';
+import 'package:cryptrend/core/message/MessageModel.dart';
+import 'package:cryptrend/pages/agentSettings/agentSettings.dart';
+import 'package:cryptrend/service/ChatService.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/message/MessageModel.dart';
-import '../../service/ChatService.dart';
-import '../../components/chatInput/chatInput.dart';
-import '../../components/messagebubble/messagebubble.dart';
+import '../agentSettings/agentSettings.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -109,6 +110,55 @@ class _ChatPageState extends State<ChatPage> {
     _loadMessages();
   }
 
+  Future<void> _clearChat() async {
+    if (chatId == null) return;
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Limpar conversa'),
+        content: Text(
+          'Tem certeza que deseja limpar todas as mensagens desta conversa?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Limpar', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    try {
+      await supabase.from('ChatMessage').delete().eq('chatId', chatId!);
+
+      setState(() {
+        messages.clear();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Conversa limpa com sucesso'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      print('Erro ao limpar conversa: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao limpar conversa'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -143,6 +193,43 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ],
         ),
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == 'clear') {
+                _clearChat();
+              } else if (value == 'train') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AgentSettings()),
+                );
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'train',
+                child: Row(
+                  children: [
+                    Icon(Icons.model_training, color: Colors.blue),
+                    SizedBox(width: 12),
+                    Text('Treinar Agente'),
+                  ],
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'clear',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete_outline, color: Colors.red),
+                    SizedBox(width: 12),
+                    Text('Limpar conversa'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [

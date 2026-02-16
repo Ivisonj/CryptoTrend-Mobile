@@ -54,7 +54,7 @@ class MessageBubble extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    DateFormat('HH:mm').format(message.createdAt),
+                    DateFormat('HH:mm').format(message.createdAt.toLocal()),
                     style: TextStyle(
                       color: isUser ? Colors.white70 : Colors.black54,
                       fontSize: 11,

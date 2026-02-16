@@ -42,7 +42,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                 // const SizedBox(width: 8.0),
                 ShadAvatar(
                   'https://app.requestly.io/delay/2000/avatars.githubusercontent.com/u/124599?v=4',
-                  size: const Size(50, 50),
+                  size: const Size(40, 40),
                   shape: const CircleBorder(),
                 ),
               ],
