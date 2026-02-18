@@ -51,13 +51,32 @@ class MainCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  '\$${price.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      '\$${price.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 40,
+                      height: 32,
+                      child: ShadIconButton(
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          size: 20,
+                          color: Colors.redAccent,
+                        ),
+                        backgroundColor: Colors.transparent,
+                        onPressed: () {
+                          deleteSymbolService(context, symbol);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -177,21 +196,6 @@ class MainCard extends StatelessWidget {
                   ),
                   // Espaço fixo para o botão de delete
                   const SizedBox(width: 8),
-                  SizedBox(
-                    width: 40,
-                    height: 32,
-                    child: ShadIconButton(
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        size: 20,
-                        color: Colors.redAccent,
-                      ),
-                      backgroundColor: Colors.transparent,
-                      onPressed: () {
-                        deleteSymbolService(context, symbol);
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),
