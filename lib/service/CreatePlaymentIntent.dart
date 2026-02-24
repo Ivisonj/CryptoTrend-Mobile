@@ -60,6 +60,18 @@ createPaymentIntent(context, planId) async {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  } on StripeException catch (e) {
+    if (e.error.code == FailureCode.Canceled) {
+      return;
+    }
+
+    var snackBar = SnackBar(
+      content: Text(e.error.localizedMessage ?? 'Erro no pagamento'),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   } catch (e) {
     var snackBar = SnackBar(
       content: Text('Erro de conexão: ${e.toString()}'),
