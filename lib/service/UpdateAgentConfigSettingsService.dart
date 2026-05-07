@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+updateAgentConfigService(
+  BuildContext context, {
+  required String llmId,
+  required String prompt,
+}) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String? access_token = sharedPreferences.getString('access_token');
+
+  try {
+    String? baseApiUrl = dotenv.env['BASE_API_URL'];
+
+    var url = Uri.parse('${baseApiUrl}/agent');
+
+    var response = await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${access_token.toString()}',
+      },
+      body: jsonEncode({'llmId': llmId, 'prompt': prompt}),
+    );
+
+    print(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      var snackBar = SnackBar(
+        content: Text('Configuração salva com sucesso!'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return true;
+    } else {
+      var errors = jsonDecode(response.body);
+      String errorMessage = 'Erro desconhecido';
+
+      if (errors is Map && errors.containsKey('message')) {
+        var message = errors['message'];
+        if (message is List) {
+          errorMessage = message.join('\n');
+        } else {
+          errorMessage = message.toString();
+        }
+      }
+
+      var snackBar = SnackBar(
+        content: Text(errorMessage),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return false;
+    }
+  } catch (e) {
+    print('Erro de conexão: ${e.toString()}');
+    var snackBar = SnackBar(
+      content: Text('Erro de conexão: ${e.toString()}'),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    return false;
+  }
+}

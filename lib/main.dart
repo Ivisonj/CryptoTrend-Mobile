@@ -21,19 +21,22 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-  );
+  await Future.delayed(const Duration(milliseconds: 300));
 
-  NotificationService.initializeNotification();
+  await FirebaseMessaging.instance.requestPermission();
+
+  await NotificationService.initializeNotification();
 
   FirebaseMessaging.onBackgroundMessage(
     NotificationService.firebaseMessagingBackgroundHandle,
   );
 
-  String? publishableKey = dotenv.env['STRIPE_PUBLIC_KEY'];
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
 
+  String? publishableKey = dotenv.env['STRIPE_PUBLIC_KEY'];
   Stripe.publishableKey = publishableKey!;
 
   runApp(const MyApp());
